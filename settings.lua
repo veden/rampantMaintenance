@@ -1,0 +1,13 @@
+-- data:extend({
+        
+--         -- {
+--         --     type = "double-setting",
+--         --     name = "rampant-evolution-evolutionPerSpawnerAbsorbed",
+--         --     setting_type = "runtime-global",
+--         --     minimum_value = -100000,
+--         --     maximum_value = 100000,
+--         --     default_value = 150,
+--         --     order = "l[modifier]-m[unit]",
+--         --     per_user = false
+--         -- },
+-- })

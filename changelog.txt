@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 16. 17. 2020
+  Features:
+    - Machines will periodically breakdown (become inactive and take some damage). Damaged machines take additional 
