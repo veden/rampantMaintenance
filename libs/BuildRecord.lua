@@ -63,11 +63,13 @@ end
 
 buildRecord["assembling-machine"] = function (tick, entity)
     local o = generate(tick, entity)
+    o["i"] = entity.products_finished
     return o
 end
 
 buildRecord["furnace"] = function (tick, entity)
-    local o = generate(tick, entity)    
+    local o = generate(tick, entity)
+    o["i"] = entity.products_finished
     return o
 end
 

@@ -1,50 +1,65 @@
 if processRecordG then
-   return processRecordG
+    return processRecordG
 end
+
+local mRandom = math.random
 
 local processRecord = {}
 
-processRecord["inserter"] = function (entityRecord)
+local function disable(disableQuery, entity, chanceOfFailure, cooldown, damage)
+    if (mRandom() < chanceOfFailure) then
+        entity.active = false
+        disableQuery.target = entity
+        disableQuery.surface = entity.surface
+        disableQuery.time_to_live = cooldown
+        rendering.draw_sprite(disableQuery)
+        entity.damage(damage, entity.force)
+    end
+    entityRecord.c = tick + cooldown
+end
+
+
+processRecord["inserter"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["lab"] = function (entityRecord)
+processRecord["lab"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["lamp"] = function (entityRecord)
+processRecord["lamp"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["generator"] = function (entityRecord)
+processRecord["generator"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["mining-drill"] = function (entityRecord)
+processRecord["mining-drill"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["offshore-pump"] = function (entityRecord)
+processRecord["offshore-pump"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["rail-signal"] = function (entityRecord)
+processRecord["rail-signal"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["chain-signal"] = function (entityRecord)
+processRecord["chain-signal"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["boiler"] = function (entityRecord)
+processRecord["boiler"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["beacon"] = function (entityRecord)
+processRecord["beacon"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["assembling-machine"] = function (entityRecord)
+processRecord["assembling-machine"] = function (entityRecord, tick, queries)
     if (entityRecord.e.active) then
         entityRecord.e.active = false
     else
@@ -52,65 +67,71 @@ processRecord["assembling-machine"] = function (entityRecord)
     end
 end
 
-processRecord["furnace"] = function (entityRecord)
-    local e = entityRecord.e
-    if (e.active) then
-        e.active = false
-    else
-        e.active = true
+processRecord["furnace"] = function (entityRecord, tick, queries)
+    if (tick > entityRecord.c) then
+        local entity = entityRecord.e
+        local productsFinished = entity.products_finished
+        local cooldown = 0
+        if (entity.active) then
+            local chanceOfFailure = 0
+            local damage = 0
+            disable(queries.disableQuery, entity, chanceOfFailure, cooldown, damage)
+        else
+            entity.active = true
+            entityRecord.c = tick + cooldown
+        end
     end
-    e.damage(10, e.force)
 end
 
-processRecord["radar"] = function (entityRecord)
-
-end
-
-processRecord["roboport"] = function (entityRecord)
+processRecord["radar"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["solar-panel"] = function (entityRecord)
+processRecord["roboport"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["fluid-turret"] = function (entityRecord)
+processRecord["solar-panel"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["ammo-turret"] = function (entityRecord)
+processRecord["fluid-turret"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["electric-turret"] = function (entityRecord)
+processRecord["ammo-turret"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["accumulator"] = function (entityRecord)
+processRecord["electric-turret"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["reactor"] = function (entityRecord)
+processRecord["accumulator"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["pump"] = function (entityRecord)
+processRecord["reactor"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["artillery-turret"] = function (entityRecord)
+processRecord["pump"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["pumpjack"] = function (entityRecord)
+processRecord["artillery-turret"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["turbine"] = function (entityRecord)
+processRecord["pumpjack"] = function (entityRecord, tick, queries)
 
 end
 
-processRecord["heat-exchanger"] = function (entityRecord)
+processRecord["turbine"] = function (entityRecord, tick, queries)
+
+end
+
+processRecord["heat-exchanger"] = function (entityRecord, tick, queries)
 
 end
 

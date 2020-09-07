@@ -28,113 +28,77 @@ local function onModSettingsChange(event)
 end
 
 local function onConfigChanged()
-    if not world.version or world.version < 1 then
+    if not world.version or world.version < 2 then
 
         world.entityCursor = nil
-        world.surfaceCursor = nil
-        world.entityMap = nil
-        world.surfaceEntityMaps = {}
+        world.entityMap = {}
+        world.queries = {}
+        world.queries.disableQuery = {
+            sprite="utility.warning_icon",
+            target=nil,
+            surface=nil,
+            x_scale=0.5,
+            y_scale=0.5,
+            time_to_live=0
+        }
 
         for i,p in ipairs(game.connected_players) do
             p.print("Rampant Maintenance - Version 1.0.0")
         end
-        world.version = 1
+        world.version = 2
     end
     onModSettingsChange()
 end
 
-local function recordEntity(tick, surface, entity)
-    local surfaceIndex = surface.index
-    local eMap = world.surfaceEntityMaps[surfaceIndex]
-    if not eMap then
-        eMap = {}
-        world.surfaceEntityMaps[surfaceIndex] = eMap
-    end
-    local cMask = entity.prototype.collision_mask
-    local build = buildRecord[entity.type]
-    if (entity.active and build and (cMask["player-layer"] or cMask["object-layer"])) then
-        eMap[entity.unit_number] = build(tick, entity)
-    end
-end
-
-local function removeEntityRecord(tick, surface, entity)
-    local entityId = entity.unit_number
-    local eMap = world.surfaceEntityMaps[surface.index]
-    if (eMap) then
-        if (world.entityCursor == entityId) then
-            world.entityCursor = next(eMap, entityId)
-        end
-        eMap[entityId] = nil
-    end
-end
-
-local function processEntity()
-    if not world.entityMap then
-        return
-    end
+local function processEntity(tick)
     local entityData
     world.entityCursor, entityData = next(world.entityMap, world.entityCursor)
     if world.entityCursor then
         if entityData.e.valid then
             local process = processRecord[entityData.e.type];
             if process then
-                process(entityData)
+                process(entityData, tick, world.queries)
             end
         else
             local oldEntityCursor = world.entityCursor
-            world.entityCursor, _ = next(world.entityMap, world.entityCursor)
+            world.entityCursor = next(world.entityMap, world.entityCursor)
             world.entityMap[oldEntityCursor] = nil
         end
-    end
-
-    if not world.entityCursor then
-        world.entityMap = nil
     end
 end
 
 local function onTick(event)
-    if not world.entityMap then
-        world.surfaceCursor, world.entityMap = next(world.surfaceEntityMaps, world.surfaceCursor)
-        world.entityCursor = nil
-    end
-    if not world.surfaceCursor then
-        return
-    end
-    if world.entityMap and (game.get_surface(world.surfaceCursor).valid) then
-        processEntity()
-        processEntity()
-        processEntity()
-    else
-        world.surfaceEntityMaps[surfaceIndex] = nil
-    end
+    local tick = event.tick
+    processEntity(tick)
+    processEntity(tick)
 end
 
 local function onRemoval(event)
     local entity = event.entity
     if entity.valid then
-        removeEntityRecord(event.tick, entity.surface, entity)
+        local entityId = entity.unit_number
+        if entityId then
+            if (world.entityCursor == entityId) then
+                world.entityCursor = next(world.entityMap, world.entityCursor)
+            end
+            world.entityMap[entityId] = nil            
+        end
     end
 end
 
 local function onCreate(event)
     local entity = event.created_entity or event.entity or event.destination
     if entity.valid then
-        recordEntity(event.tick, entity.surface, entity)
+        local cMask = entity.prototype.collision_mask
+        local build = buildRecord[entity.type]
+        if (entity.active and build and (cMask["player-layer"] or cMask["object-layer"])) then
+            world.entityMap[entity.unit_number] = build(tick, entity)
+        end
     end
 end
 
 local function onSectorScanned(event)
 
-end
-
-local function removeEntityMapSurface(event)
-    local surfaceIndex = event.surface_index
-    if (world.surfaceCursor == surfaceIndex) then
-        world.surfaceCursor = nil
-        world.entityMap = nil
-        world.entityCursor = nil
-    end
-    world.surfaceEntityMaps[surfaceIndex] = nil
 end
 
 local function onInit()
@@ -151,7 +115,6 @@ end
 
 -- hooks
 
--- script.on_nth_tick(60*60, onTick)
 script.on_event(defines.events.on_tick, onTick)
 script.on_init(onInit)
 script.on_load(onLoad)
@@ -174,13 +137,6 @@ script.on_event(
         defines.events.script_raised_destroy
     },
     onRemoval)
-
-script.on_event(
-    {
-        defines.events.on_surface_cleared,
-        defines.events.on_surface_deleted
-    },
-    removeEntityMapSurface)
 
 script.on_event(
     {
