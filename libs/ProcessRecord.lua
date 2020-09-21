@@ -2,142 +2,174 @@ if processRecordG then
     return processRecordG
 end
 
+local DEFINES_ENTITY_STATUS_LOW_POWER = defines.entity_status.low_power
+local DEFINES_ENTITY_STATUS_WORKING = defines.entity_status.working
+
 local mRandom = math.random
+local mMax = math.max
 
 local processRecord = {}
 
-local function disable(disableQuery, tick, entityRecord, failure, cooldown, damage)
-    print("doing it", tick, failure, cooldown, damage)
+local function disable(disableQuery, tick, entityRecord, world, noSprite)
     local entity = entityRecord.e
-    if (mRandom() < failure) then
-        entity.active = false
-        disableQuery.target = entity
-        disableQuery.surface = entity.surface
-        disableQuery.time_to_live = cooldown
-        rendering.draw_sprite(disableQuery)
+    local maxHealth = entity.prototype.max_health
+    local healthPercent = 1 - (entity.health / maxHealth)
+    local entityType = entity.type
+    local failures = world.buildFailure[entityType]
+    local damageFailures = world.buildDamageFailure[entityType]
+    local cooldowns = world.buildCooldown[entityType]
+    local chanceOfFailure = (mRandom() * failures[2]) + failures[1]
+    local damageFailure = healthPercent * ((mRandom() * damageFailures[2]) + damageFailures[1])
+    local cooldown = (mRandom() * cooldowns[2] + cooldowns[1]) * mMax(0.2, healthPercent)
+    local brokedown = false
+
+    if (mRandom() < (chanceOfFailure + damageFailure)) then
+        if not noSprite then
+            entity.active = false
+            disableQuery.target = entity
+            disableQuery.surface = entity.surface
+            disableQuery.time_to_live = cooldown
+            rendering.draw_sprite(disableQuery)
+        end
+        local damages = world.buildDamage[entityType]
+        local damage = ((mRandom() * damages[2]) + damages[1]) * maxHealth
+        damage = damage + (damage * healthPercent)
         entity.damage(damage, entity.force)
+        brokedown = true
     end
     entityRecord.c = tick + cooldown
+    return brokedown
 end
 
-processRecord["inserter"] = function (entityRecord, tick, world)
-
+local function defaultCooldown(world, entityRecord, entity, tick)
+    local entityType = entity.type
+    local maxHealth = entity.prototype.max_health
+    local healthPercent = 1 - (entity.health / maxHealth)
+    local cooldowns = world.buildCooldown[entityType]
+    local cooldown = (mRandom() * cooldowns[2]) + cooldowns[1]
+    entityRecord.c = tick + (mMax(0.2, healthPercent) * cooldown)
 end
 
-processRecord["lab"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["lamp"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["generator"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["mining-drill"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["offshore-pump"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["rail-signal"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["chain-signal"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["boiler"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["beacon"] = function (entityRecord, tick, world)
-
-end
-
-processRecord["assembling-machine"] = function (entityRecord, tick, world)
-    if (entityRecord.e.active) then
-        entityRecord.e.active = false
-    else
-        entityRecord.e.active = true
-    end
-end
-
-processRecord["furnace"] = function (entityRecord, tick, world)
+function processRecord.process(predicate, entityRecord, tick, world)
     if (tick > entityRecord.c) then
         local entity = entityRecord.e
+        local entityType = entity.type
         if (entity.active) then
-            if (entity.is_crafting()) then
-                local maxHealth = entity.prototype.max_health
-                local healthPercent = entity.health / maxHealth
-                local entityType = entity.type
-                local chanceOfFailure = mRandom(world.buildFailure[entityType][2], world.buildFailure[entityType][1]) + (0.3 * (1 - healthPercent))
-                local damage = mRandom(world.buildDamage[entityType][2], world.buildDamage[entityType][1]) * maxHealth
-                local cooldown = mRandom(world.buildCooldown[entityType][2], world.buildCooldown[entityType][1])
-                disable(world.queries.disableQuery, tick, entityRecord, chanceOfFailure, cooldown, damage)
+            if (predicate(entity)) then
+                disable(world.queries.disableQuery, tick, entityRecord, world)
+            else
+                defaultCooldown(world, entityRecord, entity, tick)
+            end
+        elseif (entityType == "solar-panel") then
+            if (predicate(entity)) then
+                disable(world.queries.disableQuery, tick, entityRecord, world, true)
+            else
+                defaultCooldown(world, entityRecord, entity, tick)
+            end
+        elseif (entityType == "accumulator") then
+            if (predicate(entity)) then
+                if (disable(world.queries.disableQuery, tick, entityRecord, world, true)) and entity.valid then
+                    entity.energy = 0
+                end
+            else
+                defaultCooldown(world, entityRecord, entity, tick)
             end
         else
             entity.active = true
-            entityRecord.c = tick + cooldown
+            defaultCooldown(world, entityRecord, entity, tick)
         end
     end
 end
 
-processRecord["radar"] = function (entityRecord, tick, world)
-
+processRecord["inserter"] = function (entity)
+    return entity.held_stack ~= nil
 end
 
-processRecord["roboport"] = function (entityRecord, tick, world)
-
+processRecord["lab"] = function (entity)
+    local status = entity.status
+    return status == DEFINES_ENTITY_STATUS_WORKING or status == DEFINES_ENTITY_STATUS_LOW_POWER
 end
 
-processRecord["solar-panel"] = function (entityRecord, tick, world)
-
+processRecord["lamp"] = function (entity)
+    return entity.surface.darkness > 0.5
 end
 
-processRecord["fluid-turret"] = function (entityRecord, tick, world)
-
+processRecord["generator"] = function (entity)
+    return entity.energy_generated_last_tick > 0
 end
 
-processRecord["ammo-turret"] = function (entityRecord, tick, world)
-
+processRecord["mining-drill"] = function (entity)
+    return entity.mining_progress > 0
 end
 
-processRecord["electric-turret"] = function (entityRecord, tick, world)
-
+processRecord["offshore-pump"] = function (entity)
+    return entity.fluidbox.get_flow(1) > 0
 end
 
-processRecord["accumulator"] = function (entityRecord, tick, world)
-
+processRecord["solar-panel"] = function (entity)
+    return entity.surface.darkness < 0.5
 end
 
-processRecord["reactor"] = function (entityRecord, tick, world)
-
+processRecord["accumulator"] = function (entity)
+    return entity.energy > 0
 end
 
-processRecord["pump"] = function (entityRecord, tick, world)
-
+processRecord["boiler"] = function (entity)
+    local status = entity.status
+    return status == DEFINES_ENTITY_STATUS_WORKING or status == DEFINES_ENTITY_STATUS_LOW_POWER
 end
 
-processRecord["artillery-turret"] = function (entityRecord, tick, world)
-
+processRecord["beacon"] = function (entity)
+    return entity.energy > 0
 end
 
-processRecord["pumpjack"] = function (entityRecord, tick, world)
-
+processRecord["assembling-machine"] = function (entity)
+    return entity.is_crafting()
 end
 
-processRecord["turbine"] = function (entityRecord, tick, world)
-
+processRecord["furnace"] = function (entity)
+    return entity.is_crafting()
 end
 
-processRecord["heat-exchanger"] = function (entityRecord, tick, world)
+processRecord["rocket-silo"] = function (entity)
+    return entity.is_crafting()
+end
 
+processRecord["radar"] = function (entity)
+    return entity.energy > 0
+end
+
+processRecord["roboport"] = function (entity)
+    return entity.energy > 0
+end
+
+processRecord["fluid-turret"] = function (entity)
+    return entity.shooting_target ~= nil
+end
+
+processRecord["ammo-turret"] = function (entity)
+    return entity.shooting_target ~= nil
+end
+
+processRecord["electric-turret"] = function (entity)
+    return entity.shooting_target ~= nil
+end
+
+processRecord["reactor"] = function (entity)
+    return entity.temperature > 0
+end
+
+processRecord["pump"] = function (entity)
+    return entity.fluidbox.get_flow(1) > 0
+end
+
+processRecord["artillery-turret"] = function (entity)
+    return entity.shooting_target ~= nil
+end
+
+processRecord["electric-pole"] = function (entity)
+    print("ep", entity.is_connected_to_electric_network())
+    return entity.is_connected_to_electric_network()
 end
 
 processRecordG = processRecord
