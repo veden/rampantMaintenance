@@ -26,7 +26,7 @@
          #:path-prefix packageName
          (string->path "info.json")
          (string->path "control.lua")
-         ;; (string->path "data.lua")
+         (string->path "data.lua")
          ;; (string->path "thumbnail.png")
          ;; (string->path "data-updates.lua")
          ;; (string->path "data-final-fixes.lua")
@@ -65,7 +65,7 @@
       (make-directory packagePath)
       (copyFile "control.lua" modFolder)
       (copyFile "info.json" modFolder)
-      ;; (copyFile "data.lua" modFolder)
+      (copyFile "data.lua" modFolder)
       ;; (copyFile "data-final-fixes.lua" modFolder)
       ;; (copyFile "data-updates.lua" modFolder)
       (copyFile "LICENSE.md" modFolder)

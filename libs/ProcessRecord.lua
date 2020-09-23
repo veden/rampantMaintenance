@@ -10,20 +10,33 @@ local mMax = math.max
 
 local processRecord = {}
 
+local function getResearch(force, world, type)
+    local researches = world.forceResearched[force]
+    if (researches) then
+        local value = researches[type]
+        if value then
+            return 1 - value
+        end        
+    end
+    return 1
+end
+
 local function disable(disableQuery, tick, entityRecord, world, noSprite)
     local entity = entityRecord.e
     local maxHealth = entity.prototype.max_health
+    local entityForce = entity.force.name
     local healthPercent = 1 - (entity.health / maxHealth)
     local entityType = entity.type
     local failures = world.buildFailure[entityType]
     local damageFailures = world.buildDamageFailure[entityType]
     local cooldowns = world.buildCooldown[entityType]
-    local chanceOfFailure = (mRandom() * failures[2]) + failures[1]
-    local damageFailure = healthPercent * ((mRandom() * damageFailures[2]) + damageFailures[1])
+    local chanceOfFailure = ((mRandom() * failures[2]) + failures[1]) * getResearch(entityForce, world, "failure")
+    local damageFailure = (healthPercent * ((mRandom() * damageFailures[2]) + damageFailures[1])) * getResearch(entityForce, world, "damage-failure")
     local cooldown = (mRandom() * cooldowns[2] + cooldowns[1]) * mMax(0.2, healthPercent)
     local brokedown = false
 
     if (mRandom() < (chanceOfFailure + damageFailure)) then
+        cooldown = cooldown * getResearch(entityForce, world, "downtime")
         if not noSprite then
             entity.active = false
             disableQuery.target = entity
@@ -32,10 +45,12 @@ local function disable(disableQuery, tick, entityRecord, world, noSprite)
             rendering.draw_sprite(disableQuery)
         end
         local damages = world.buildDamage[entityType]
-        local damage = ((mRandom() * damages[2]) + damages[1]) * maxHealth
+        local damage = (((mRandom() * damages[2]) + damages[1]) * maxHealth) * getResearch(entityForce, world, "damage")
         damage = damage + (damage * healthPercent)
         entity.damage(damage, entity.force)
         brokedown = true
+    else
+        cooldown = cooldown * (1 + (1 - getResearch(entityForce, world, "downtime")))
     end
     entityRecord.c = tick + cooldown
     return brokedown
@@ -43,11 +58,11 @@ end
 
 local function defaultCooldown(world, entityRecord, entity, tick)
     local entityType = entity.type
-    local maxHealth = entity.prototype.max_health
+    local maxHealth = entity.prototype.max_health    
     local healthPercent = 1 - (entity.health / maxHealth)
     local cooldowns = world.buildCooldown[entityType]
     local cooldown = (mRandom() * cooldowns[2]) + cooldowns[1]
-    entityRecord.c = tick + (mMax(0.2, healthPercent) * cooldown)
+    entityRecord.c = tick + ((mMax(0.2, healthPercent) * cooldown) * (1 + (1 - getResearch(entity.force.name, world, "downtime"))))
 end
 
 function processRecord.process(predicate, entityRecord, tick, world)
