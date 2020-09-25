@@ -1,11 +1,16 @@
 
 local function buildResearches(name)
-    local moduleName = "effectivity"
+    local tint = {r=0.65,g=0.65,b=0.65}
     if (name=="damage") then
-        moduleName = "productivity"
+        tint = {r=0.65,g=0.4,b=0.65}
     elseif (name=="downtime") then
-        moduleName = "speed"
+        tint = {r=0.55,g=0.55,b=0.85}
+    elseif (name=="damage-failure") then
+        tint = {r=0.45,g=0.7,b=0.5}
+    elseif (name=="failure") then
+        tint = {r=0.75,g=0.4,b=0.65}
     end
+    
     data:extend({
             {
                 type = "technology",
@@ -13,14 +18,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-1.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -43,14 +48,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-1.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -73,14 +78,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-1.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -104,14 +109,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-2.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -135,14 +140,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-2.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -167,14 +172,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-2.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -199,14 +204,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-3.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -232,14 +237,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-3.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -265,14 +270,14 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=4,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/" .. moduleName .. "-module-3.png",icon_size=128,icon_mipmaps=4,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
                 },
                 effects =
                     {
                         {
                             type = "nothing",
-                            effect_description = "description.rampant-maintenance-reduce-" .. name
+                            effect_description = {"description.rampant-maintenance-reduce-" .. name}
                         }
                     },
                 unit =
@@ -300,3 +305,4 @@ buildResearches("failure")
 buildResearches("damage")
 buildResearches("damage-failure")
 buildResearches("downtime")
+buildResearches("checks")

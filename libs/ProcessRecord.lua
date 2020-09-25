@@ -16,7 +16,7 @@ local function getResearch(force, world, type)
         local value = researches[type]
         if value then
             return 1 - value
-        end        
+        end
     end
     return 1
 end
@@ -32,11 +32,12 @@ local function disable(disableQuery, tick, entityRecord, world, noSprite)
     local cooldowns = world.buildCooldown[entityType]
     local chanceOfFailure = ((mRandom() * failures[2]) + failures[1]) * getResearch(entityForce, world, "failure")
     local damageFailure = (healthPercent * ((mRandom() * damageFailures[2]) + damageFailures[1])) * getResearch(entityForce, world, "damage-failure")
-    local cooldown = (mRandom() * cooldowns[2] + cooldowns[1]) * mMax(0.2, healthPercent)
     local brokedown = false
+    local cooldown
 
     if (mRandom() < (chanceOfFailure + damageFailure)) then
-        cooldown = cooldown * getResearch(entityForce, world, "downtime")
+        local downtimes = world.buildDowntime[entityType]
+        cooldown = ((mRandom() * downtimes[2] + downtimes[1]) * mMax(0.2, healthPercent)) * getResearch(entityForce, world, "downtime")
         if not noSprite then
             entity.active = false
             disableQuery.target = entity
@@ -50,7 +51,7 @@ local function disable(disableQuery, tick, entityRecord, world, noSprite)
         entity.damage(damage, entity.force)
         brokedown = true
     else
-        cooldown = cooldown * (1 + (1 - getResearch(entityForce, world, "downtime")))
+        cooldown = ((mRandom() * cooldowns[2] + cooldowns[1]) * mMax(0.2, healthPercent)) * (1 + (1 - getResearch(entityForce, world, "cooldown")))
     end
     entityRecord.c = tick + cooldown
     return brokedown
@@ -58,11 +59,11 @@ end
 
 local function defaultCooldown(world, entityRecord, entity, tick)
     local entityType = entity.type
-    local maxHealth = entity.prototype.max_health    
+    local maxHealth = entity.prototype.max_health
     local healthPercent = 1 - (entity.health / maxHealth)
     local cooldowns = world.buildCooldown[entityType]
     local cooldown = (mRandom() * cooldowns[2]) + cooldowns[1]
-    entityRecord.c = tick + ((mMax(0.2, healthPercent) * cooldown) * (1 + (1 - getResearch(entity.force.name, world, "downtime"))))
+    entityRecord.c = tick + ((mMax(0.2, healthPercent) * cooldown) * (1 + (1 - getResearch(entity.force.name, world, "cooldown"))))
 end
 
 function processRecord.process(predicate, entityRecord, tick, world)
@@ -75,13 +76,13 @@ function processRecord.process(predicate, entityRecord, tick, world)
             else
                 defaultCooldown(world, entityRecord, entity, tick)
             end
-        elseif (entityType == "solar-panel") then
+        elseif (entityType == "solar-panel") or (entityType == "electric-pole") then
             if (predicate(entity)) then
                 disable(world.queries.disableQuery, tick, entityRecord, world, true)
             else
                 defaultCooldown(world, entityRecord, entity, tick)
             end
-        elseif (entityType == "accumulator") then
+        elseif (entityType == "accumulator") or (entityType == "lamp") then
             if (predicate(entity)) then
                 if (disable(world.queries.disableQuery, tick, entityRecord, world, true)) and entity.valid then
                     entity.energy = 0
@@ -106,7 +107,7 @@ processRecord["lab"] = function (entity)
 end
 
 processRecord["lamp"] = function (entity)
-    return entity.surface.darkness > 0.5
+    return (entity.energy > 0) and (entity.surface.darkness > 0.4)
 end
 
 processRecord["generator"] = function (entity)
@@ -183,8 +184,7 @@ processRecord["artillery-turret"] = function (entity)
 end
 
 processRecord["electric-pole"] = function (entity)
-    print("ep", entity.is_connected_to_electric_network())
-    return entity.is_connected_to_electric_network()
+    return true
 end
 
 processRecordG = processRecord
