@@ -12,16 +12,10 @@ local processRecord = {}
 
 local function getResearch(force, world, type)
     local researches = world.forceResearched[force]
-    if (researches) then
-        local value = researches[type]
-        if value then
-            return 1 - value
-        end
-    end
-    return 1
+    return (researches and researches[type]) or 1
 end
 
-local function disable(disableQuery, tick, entityRecord, world, noSprite)
+local function disable(disableQuery, tick, entityRecord, world, sprite)
     local entity = entityRecord.e
     local maxHealth = entity.prototype.max_health
     local entityForce = entity.force.name
@@ -36,14 +30,16 @@ local function disable(disableQuery, tick, entityRecord, world, noSprite)
     local cooldown
 
     if (mRandom() < (chanceOfFailure + damageFailure)) then
-        local downtimes = world.buildDowntime[entityType]
-        cooldown = ((mRandom() * downtimes[2] + downtimes[1]) * mMax(0.2, healthPercent)) * getResearch(entityForce, world, "downtime")
-        if not noSprite then
+        if sprite then
             entity.active = false
             disableQuery.target = entity
             disableQuery.surface = entity.surface
+            local downtimes = world.buildDowntime[entityType]
+            cooldown = ((mRandom() * downtimes[2] + downtimes[1]) * mMax(0.2, healthPercent)) * getResearch(entityForce, world, "downtime")            
             disableQuery.time_to_live = cooldown
             rendering.draw_sprite(disableQuery)
+        else
+            cooldown = ((mRandom() * cooldowns[2] + cooldowns[1]) * mMax(0.2, healthPercent)) * (1 + (1 - getResearch(entityForce, world, "cooldown")))
         end
         local damages = world.buildDamage[entityType]
         local damage = (((mRandom() * damages[2]) + damages[1]) * maxHealth) * getResearch(entityForce, world, "damage")
@@ -72,19 +68,19 @@ function processRecord.process(predicate, entityRecord, tick, world)
         local entityType = entity.type
         if (entity.active) then
             if (predicate(entity)) then
-                disable(world.queries.disableQuery, tick, entityRecord, world)
+                disable(world.queries.disableQuery, tick, entityRecord, world, true)
             else
                 defaultCooldown(world, entityRecord, entity, tick)
             end
         elseif (entityType == "solar-panel") or (entityType == "electric-pole") then
             if (predicate(entity)) then
-                disable(world.queries.disableQuery, tick, entityRecord, world, true)
+                disable(world.queries.disableQuery, tick, entityRecord, world, false)
             else
                 defaultCooldown(world, entityRecord, entity, tick)
             end
         elseif (entityType == "accumulator") or (entityType == "lamp") then
             if (predicate(entity)) then
-                if (disable(world.queries.disableQuery, tick, entityRecord, world, true)) and entity.valid then
+                if (disable(world.queries.disableQuery, tick, entityRecord, world, false)) and entity.valid then
                     entity.energy = 0
                 end
             else

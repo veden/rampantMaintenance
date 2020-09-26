@@ -22,8 +22,8 @@ function buildSettings()
     }
 
     local order = {"c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
-    
-    local p = function (name, i)
+
+    local p = function (name, i, attributes)
         print("{")
         print("type = \"bool-setting\",")
         print("name = \"rampant-maintenance-use-" .. name .. "\",")
@@ -33,166 +33,430 @@ function buildSettings()
         print("per_user = false")
         print("},")
 
-        print("{")
-        print("type = \"double-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-max-failure-rate\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 0.0001,")
-        print("maximum_value = 1,")
-        print("default_value = 0.1,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
+        for attribute,value in pairs(attributes) do
+            if (attribute=="max-failure-rate") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-max-failure-rate\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 0.0001,")
+                print("maximum_value = 1,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="min-failure-rate") then
 
-        print("{")
-        print("type = \"double-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-min-failure-rate\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 0.0001,")
-        print("maximum_value = 1,")
-        print("default_value = 0.05,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
-
-        print("{")
-        print("type = \"int-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-max-cooldown\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 1,")
-        print("maximum_value = 1000000000,")
-        print("default_value = 360,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
-
-        print("{")
-        print("type = \"int-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-min-cooldown\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 1,")
-        print("maximum_value = 1000000000,")
-        print("default_value = 60,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
-
-        print("{")
-        print("type = \"double-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-max-damage\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 0.0001,")
-        print("maximum_value = 1,")
-        print("default_value = 0.25,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
-
-        print("{")
-        print("type = \"double-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-min-damage\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 0.0001,")
-        print("maximum_value = 1,")
-        print("default_value = 0.1,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
-
-        print("{")
-        print("type = \"double-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-max-damage-failure\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 0.0001,")
-        print("maximum_value = 1,")
-        print("default_value = 0.3,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
-
-        print("{")
-        print("type = \"double-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-min-damage-failure\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 0.0001,")
-        print("maximum_value = 1,")
-        print("default_value = 0.1,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
-
-        print("{")
-        print("type = \"double-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-max-downtime\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 1,")
-        print("maximum_value = 1000000000,")
-        print("default_value = 360,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
-
-        print("{")
-        print("type = \"double-setting\",")
-        print("name = \"rampant-maintenance-" .. name .. "-min-downtime\",")
-        print("setting_type = \"runtime-global\",")
-        print("minimum_value = 1,")
-        print("maximum_value = 1000000000,")
-        print("default_value = 60,")
-        print("order = \"l[modifier]-".. order[i] .."[unit]\",")
-        print("per_user = false")
-        print("},")
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-min-failure-rate\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 0.0001,")
+                print("maximum_value = 1,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="max-cooldown") then
+                print("{")
+                print("type = \"int-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-max-cooldown\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 1,")
+                print("maximum_value = 1000000000,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="min-cooldown") then
+                print("{")
+                print("type = \"int-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-min-cooldown\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 1,")
+                print("maximum_value = 1000000000,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="max-damage") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-max-damage\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 0.0001,")
+                print("maximum_value = 1,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="min-damage") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-min-damage\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 0.0001,")
+                print("maximum_value = 1,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="max-damage-failure") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-max-damage-failure\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 0.0001,")
+                print("maximum_value = 1,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="min-damage-failure") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-min-damage-failure\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 0.0001,")
+                print("maximum_value = 1,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="max-downtime") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-max-downtime\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 1,")
+                print("maximum_value = 1000000000,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            elseif (attribute=="min-downtime") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-min-downtime\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 1,")
+                print("maximum_value = 1000000000,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("per_user = false")
+                print("},")
+            end
+        end
     end
 
-    
+    local l={
+        {"accumulator", {
+             ["max-cooldown"]=30*60,
+             ["min-cooldown"]=15*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.4,
+             ["min-damage-failure"]=0.2,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05
+        }},
 
-    local l={"accumulator",
-             "ammo-turret",
-             "artillery-turret",
-             "assembling-machine",
-             "beacon",
-             "boiler",
-             "electric-pole",
-             "electric-turret",
-             "fluid-turret",
-             "furnace",
-             "generator",
-             "inserter",
-             "lab",
-             "lamp",
-             "mining-drill",
-             "offshore-pump",
-             "pump",
-             "radar",
-             "reactor",
-             "roboport",
-             "rocket-silo",
-             "solar-panel"}
+        {"ammo-turret", {
+             ["max-cooldown"]=15*60,
+             ["min-cooldown"]=9*60,
+             ["max-damage"]=0.15,
+             ["min-damage"]=0.075,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.125,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"artillery-turret", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.15,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"assembling-machine", {
+             ["max-cooldown"]=25*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.2,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"beacon", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"boiler", {
+             ["max-cooldown"]=30*60,
+             ["min-cooldown"]=15*60,
+             ["max-damage"]=0.20,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"electric-pole", {
+             ["max-cooldown"]=40*60,
+             ["min-cooldown"]=25*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.075,
+             ["min-failure-rate"]=0.05
+        }},
+
+        {"electric-turret", {
+             ["max-cooldown"]=15*60,
+             ["min-cooldown"]=9*60,
+             ["max-damage"]=0.15,
+             ["min-damage"]=0.075,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"fluid-turret", {
+             ["max-cooldown"]=15*60,
+             ["min-cooldown"]=9*60,
+             ["max-damage"]=0.15,
+             ["min-damage"]=0.075,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"furnace", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.2,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"generator", {
+             ["max-cooldown"]=30*60,
+             ["min-cooldown"]=15*60,
+             ["max-damage"]=0.2,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"inserter", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"lab", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"lamp", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05
+        }},
+
+        {"mining-drill", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"offshore-pump", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"pump", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"radar", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"reactor", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"roboport", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"rocket-silo", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05,
+             ["max-downtime"]=10*60,
+             ["min-downtime"]=5*60,
+        }},
+
+        {"solar-panel", {
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=10*60,
+             ["max-damage"]=0.25,
+             ["min-damage"]=0.1,
+             ["max-damage-failure"]=0.3,
+             ["min-damage-failure"]=0.1,
+             ["max-failure-rate"]=0.1,
+             ["min-failure-rate"]=0.05
+        }}
+    }
 
     for i,v in ipairs(l) do
-        p(v, i)
+        p(v[1], i, v[2])
     end
-end
-
-
-function buildModChanges()
-
-    local l={"inserter", "lab","lamp","generator","mining-drill","offshore-pump","boiler","beacon","assembling-machine","furnace","radar","roboport","solar-panel","fluid-turret","ammo-turret","electric-turret","accumulator","reactor","pump","artillery-turret", "rocket-silo", "electric-pole"}
-
-    local p = function(name)
+    print("------------------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------------------")
+    print("------------------------------------------------------------------------------------")
+    for i,v in ipairs(l) do
+        local name = v[1]
+        local attributes = v[2]
         print("world.buildLookup[\"" .. name .. "\"] = settings.global[\"rampant-maintenance-use-" .. name .. "\"].value")
-        print("world.buildDowntime[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-downtime\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-downtime\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-downtime\"].value*60 }")
-        print("world.buildFailure[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-failure-rate\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-failure-rate\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-failure-rate\"].value }")
-        print("world.buildDamage[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-damage\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-damage\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-damage\"].value }")
-        print("world.buildDamageFailure[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-damage-failure\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-damage-failure\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-damage-failure\"].value }")
-        print("world.buildCooldown[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-cooldown\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-cooldown\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-cooldown\"].value*60 }")
-    end
-
-    for _,v in ipairs(l) do
-        p(v)
-    end
+        if (attributes["max-cooldown"]) then
+            print("world.buildCooldown[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-cooldown\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-cooldown\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-cooldown\"].value*60 }")
+        end
+        if (attributes["max-damage"]) then
+            print("world.buildDamage[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-damage\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-damage\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-damage\"].value }")
+        end
+        if (attributes["max-damage-failure"]) then
+            print("world.buildDamageFailure[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-damage-failure\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-damage-failure\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-damage-failure\"].value }")
+        end
+        if (attributes["max-failure-rate"]) then
+            print("world.buildFailure[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-failure-rate\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-failure-rate\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-failure-rate\"].value }")
+        end
+        if (attributes["max-downtime"]) then
+            print("world.buildDowntime[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-downtime\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-downtime\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-downtime\"].value*60 }")
+        end
+    end    
 end
-
 
 function buildLocaleSettingsName()
     local l={"inserter", "lab","lamp","generator","mining-drill","offshore-pump","boiler","beacon","assembling-machine","furnace","radar","roboport","solar-panel","fluid-turret","ammo-turret","electric-turret","accumulator","reactor","pump","artillery-turret", "rocket-silo", "electric-pole"}

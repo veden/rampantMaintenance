@@ -5,6 +5,6 @@
     "title" : "Rampant Maintenance",
     "author" : "Veden",
     "homepage" : "",
-    "description" : "",
+    "description" : "Player owned machines will breakdown overtime. Configuration for entities in mod settings. Research available to offset breakdowns",
     "dependencies" : ["base >= 1.0.0"]
 }
