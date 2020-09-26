@@ -4,6 +4,7 @@ end
 
 local DEFINES_ENTITY_STATUS_LOW_POWER = defines.entity_status.low_power
 local DEFINES_ENTITY_STATUS_WORKING = defines.entity_status.working
+local DEFINES_ENTITY_STATUS_LOW_INPUT_FLUID = defines.entity_status.low_input_fluid
 
 local mRandom = math.random
 local mMax = math.max
@@ -35,7 +36,7 @@ local function disable(disableQuery, tick, entityRecord, world, sprite)
             disableQuery.target = entity
             disableQuery.surface = entity.surface
             local downtimes = world.buildDowntime[entityType]
-            cooldown = ((mRandom() * downtimes[2] + downtimes[1]) * mMax(0.2, healthPercent)) * getResearch(entityForce, world, "downtime")            
+            cooldown = ((mRandom() * downtimes[2] + downtimes[1]) * mMax(0.2, healthPercent)) * getResearch(entityForce, world, "downtime")
             disableQuery.time_to_live = cooldown
             rendering.draw_sprite(disableQuery)
         else
@@ -68,7 +69,11 @@ function processRecord.process(predicate, entityRecord, tick, world)
         local entityType = entity.type
         if (entity.active) then
             if (predicate(entity)) then
-                disable(world.queries.disableQuery, tick, entityRecord, world, true)
+                if (disable(world.queries.disableQuery, tick, entityRecord, world, true)) and entity.valid then
+                    if (entity.energy > 0) then
+                        entity.energy = 0
+                    end
+                end
             else
                 defaultCooldown(world, entityRecord, entity, tick)
             end
@@ -94,7 +99,7 @@ function processRecord.process(predicate, entityRecord, tick, world)
 end
 
 processRecord["inserter"] = function (entity)
-    return entity.held_stack ~= nil
+    return entity.held_stack.valid_for_read
 end
 
 processRecord["lab"] = function (entity)
@@ -103,19 +108,20 @@ processRecord["lab"] = function (entity)
 end
 
 processRecord["lamp"] = function (entity)
-    return (entity.energy > 0) and (entity.surface.darkness > 0.4)
+    return (entity.energy > 0.01) and (entity.surface.darkness > 0.4)
 end
 
 processRecord["generator"] = function (entity)
-    return entity.energy_generated_last_tick > 0
+    return entity.energy_generated_last_tick > 0.01
 end
 
 processRecord["mining-drill"] = function (entity)
-    return entity.mining_progress > 0
+    local status = entity.status
+    return status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["offshore-pump"] = function (entity)
-    return entity.fluidbox.get_flow(1) > 0
+    return entity.fluidbox.get_flow(1) > 0.01
 end
 
 processRecord["solar-panel"] = function (entity)
@@ -123,36 +129,39 @@ processRecord["solar-panel"] = function (entity)
 end
 
 processRecord["accumulator"] = function (entity)
-    return entity.energy > 0
+    return entity.energy > 0.01
 end
 
 processRecord["boiler"] = function (entity)
     local status = entity.status
-    return status == DEFINES_ENTITY_STATUS_WORKING or status == DEFINES_ENTITY_STATUS_LOW_POWER
+    return status == DEFINES_ENTITY_STATUS_WORKING or status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_LOW_INPUT_FLUID
 end
 
 processRecord["beacon"] = function (entity)
-    return entity.energy > 0
+    return entity.energy > 0.01
 end
 
 processRecord["assembling-machine"] = function (entity)
-    return entity.is_crafting()
+    local status = entity.status
+    return status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["furnace"] = function (entity)
-    return entity.is_crafting()
+    local status = entity.status
+    return status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["rocket-silo"] = function (entity)
-    return entity.is_crafting()
+    local status = entity.status
+    return status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["radar"] = function (entity)
-    return entity.energy > 0
+    return entity.energy > 0.01
 end
 
 processRecord["roboport"] = function (entity)
-    return entity.energy > 0
+    return entity.energy > 0.01
 end
 
 processRecord["fluid-turret"] = function (entity)
@@ -168,11 +177,11 @@ processRecord["electric-turret"] = function (entity)
 end
 
 processRecord["reactor"] = function (entity)
-    return entity.temperature > 0
+    return entity.temperature > 0.01
 end
 
 processRecord["pump"] = function (entity)
-    return entity.fluidbox.get_flow(1) > 0
+    return entity.fluidbox.get_flow(1) > 0.01
 end
 
 processRecord["artillery-turret"] = function (entity)
