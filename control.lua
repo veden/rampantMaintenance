@@ -25,6 +25,12 @@ local function onModSettingsChange(event)
         return false
     end
 
+    world.rollFailure = mRandom()
+    world.rollDamageFailure = mRandom()
+    world.rollChanceFailure = mRandom()
+    world.rollCooldown = mRandom()
+    world.rollDamage = mRandom()
+
     world.buildLookup = {}
     world.buildDamage = {}
     world.buildCooldown = {}
@@ -246,6 +252,18 @@ end
 
 local function onTick(event)
     local tick = event.tick
+    local index = (tick % 50)
+    if (index == 0) then
+        world.rollFailure = mRandom()
+    elseif (index == 10) then
+        world.rollDamageFailure = mRandom()
+    elseif (index == 20) then
+        world.rollChanceFailure = mRandom()
+    elseif (index == 30) then
+        world.rollCooldown = mRandom()
+    elseif (index == 40) then
+        world.rollDamage = mRandom()
+    end
     for i=1,world.checksPerTick do
         processEntity(tick)
     end
