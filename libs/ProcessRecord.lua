@@ -37,7 +37,9 @@ local function disable(disableQuery, tick, entityRecord, world, sprite)
             local downtimes = world.buildDowntime[entityType]
             cooldown = (((world.rollCooldown * downtimes[2]) + downtimes[1]) * mMax(0.2, healthPercent)) * getResearch(entityForce, world, "downtime")
             disableQuery.time_to_live = cooldown
-            -- rendering.draw_sprite(disableQuery)
+            if world.showBreakdownSprite then
+                rendering.draw_sprite(disableQuery)
+            end
         else
             cooldown = (((world.rollCooldown * cooldowns[2]) + cooldowns[1]) * mMax(0.2, healthPercent)) * (1 + (1 - getResearch(entityForce, world, "cooldown")))
         end

@@ -39,6 +39,7 @@ local function onModSettingsChange(event)
     world.buildDowntime = {}
     world.checksPerTick = settings.global["rampant-maintenance-checks-per-tick"].value
 
+    world.showBreakdownSprite = settings.global["rampant-maintenance-show-breakdown-sprite"].value
     world.buildLookup["accumulator"] = settings.global["rampant-maintenance-use-accumulator"].value
     world.buildCooldown["accumulator"] = { settings.global["rampant-maintenance-accumulator-min-cooldown"].value*60, settings.global["rampant-maintenance-accumulator-max-cooldown"].value*60-settings.global["rampant-maintenance-accumulator-min-cooldown"].value*60 }
     world.buildDamage["accumulator"] = { settings.global["rampant-maintenance-accumulator-min-damage"].value, settings.global["rampant-maintenance-accumulator-max-damage"].value-settings.global["rampant-maintenance-accumulator-min-damage"].value }
@@ -202,7 +203,7 @@ local function onModSettingsChange(event)
 end
 
 local function onConfigChanged()
-    if not world.version or world.version < 4 then
+    if not world.version or world.version < 5 then
 
         world.entityCursor = 1
         world.entityFill = 1
@@ -221,9 +222,9 @@ local function onConfigChanged()
         }
 
         for i,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.0.0")
+            p.print("Rampant Maintenance - Version 1.0.1")
         end
-        world.version = 4
+        world.version = 5
     end
     onModSettingsChange()
 end

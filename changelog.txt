@@ -1,5 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 19. 10. 2020
+  Improvements:
+    - Added sprite when a breakdown occurs can be removed in settings for more UPS.
+
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
-Date: 16. 17. 2020
+Date: 18. 10. 2020
   Features:
     - Machines will periodically breakdown (become inactive and take some damage). Damaged machines take additional 

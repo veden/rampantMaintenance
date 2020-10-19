@@ -10,6 +10,14 @@ data:extend({
             per_user = false
         },
 
+        {
+            type = "bool-setting",
+            name = "rampant-maintenance-show-breakdown-sprite",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "l[modifier]-b[unit]",
+            per_user = false
+        },
 
         {
             type = "bool-setting",
