@@ -18,8 +18,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
@@ -48,8 +48,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
@@ -78,8 +78,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-1.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
@@ -109,8 +109,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
@@ -140,8 +140,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
@@ -172,8 +172,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-2.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
@@ -204,8 +204,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
@@ -237,8 +237,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
@@ -270,8 +270,8 @@ local function buildResearches(name)
                 localised_name = {"technology-name.rampant-maintenance-reduce-" .. name},
                 localised_description = {"technology-description.rampant-maintenance-reduce-" .. name},
                 icons = {
-                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=128,icon_mipmaps=1,shift={0,10},scale=0.75},
-                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=128,icon_mipmaps=1,tint=tint,shift={-28,-28},scale=0.25}
+                    {icon="__base__/graphics/technology/advanced-electronics.png",icon_size=256,icon_mipmaps=4,shift={0,10},scale=0.75},
+                    {icon="__base__/graphics/technology/effectivity-module-3.png",icon_size=256,icon_mipmaps=4,tint=tint,shift={-48,-68},scale=0.25}
                 },
                 effects =
                     {
