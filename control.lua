@@ -203,7 +203,7 @@ local function onModSettingsChange(event)
 end
 
 local function onConfigChanged()
-    if not world.version or world.version < 5 then
+    if not world.version or world.version < 6 then
 
         world.entityCursor = 1
         world.entityFill = 1
@@ -216,15 +216,16 @@ local function onConfigChanged()
             sprite="utility.warning_icon",
             target=nil,
             surface=nil,
-            x_scale=0.5,
-            y_scale=0.5,
+            x_scale=0.25,
+            y_scale=0.25,
+            target_offset = {-0.5, -0.5},
             time_to_live=0
         }
 
         for i,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.0.1")
+            p.print("Rampant Maintenance - Version 1.0.3")
         end
-        world.version = 5
+        world.version = 6
     end
     onModSettingsChange()
 end
@@ -315,11 +316,7 @@ local function onResearchFinished(event)
             researches = {}
             world.forceResearched[researchForce] = researches
         end
-        local currentResearch = researches[researchType]
-        if not currentResearch then
-            currentResearch = 0
-        end
-        researches[researchType] = 1 - (research.level * 0.09)
+        researches[researchType] = 1 - (research.level * 0.08)
     end
 end
 

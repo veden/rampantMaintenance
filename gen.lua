@@ -29,7 +29,7 @@ function buildSettings()
         print("name = \"rampant-maintenance-use-" .. name .. "\",")
         print("setting_type = \"runtime-global\",")
         print("default_value = true,")
-        print("order = \"l[modifier]-b[unit]\",")
+        print("order = \"a[modifier]-c[unit]\",")
         print("per_user = false")
         print("},")
 
@@ -42,11 +42,11 @@ function buildSettings()
                 print("minimum_value = 0.0001,")
                 print("maximum_value = 1,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                -- print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-b[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="min-failure-rate") then
-
                 print("{")
                 print("type = \"double-setting\",")
                 print("name = \"rampant-maintenance-" .. name .. "-min-failure-rate\",")
@@ -54,7 +54,7 @@ function buildSettings()
                 print("minimum_value = 0.0001,")
                 print("maximum_value = 1,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-a[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="max-cooldown") then
@@ -65,7 +65,7 @@ function buildSettings()
                 print("minimum_value = 1,")
                 print("maximum_value = 1000000000,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-d[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="min-cooldown") then
@@ -76,7 +76,7 @@ function buildSettings()
                 print("minimum_value = 1,")
                 print("maximum_value = 1000000000,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-c[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="max-damage") then
@@ -87,7 +87,7 @@ function buildSettings()
                 print("minimum_value = 0.0001,")
                 print("maximum_value = 1,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-f[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="min-damage") then
@@ -98,7 +98,7 @@ function buildSettings()
                 print("minimum_value = 0.0001,")
                 print("maximum_value = 1,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-e[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="max-damage-failure") then
@@ -109,7 +109,7 @@ function buildSettings()
                 print("minimum_value = 0.0001,")
                 print("maximum_value = 1,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-h[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="min-damage-failure") then
@@ -120,7 +120,7 @@ function buildSettings()
                 print("minimum_value = 0.0001,")
                 print("maximum_value = 1,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-g[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="max-downtime") then
@@ -131,7 +131,7 @@ function buildSettings()
                 print("minimum_value = 1,")
                 print("maximum_value = 1000000000,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-j[unit]\",")
                 print("per_user = false")
                 print("},")
             elseif (attribute=="min-downtime") then
@@ -142,7 +142,7 @@ function buildSettings()
                 print("minimum_value = 1,")
                 print("maximum_value = 1000000000,")
                 print("default_value = "..value..",")
-                print("order = \"l[modifier]-".. order[i] .."[unit]\",")
+                print("order = \"l[modifier]-i[unit]\",")
                 print("per_user = false")
                 print("},")
             end
@@ -151,86 +151,86 @@ function buildSettings()
 
     local l={
         {"accumulator", {
-             ["max-cooldown"]=30*60,
-             ["min-cooldown"]=15*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.4,
              ["min-damage-failure"]=0.2,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1
         }},
 
         {"ammo-turret", {
-             ["max-cooldown"]=15*60,
-             ["min-cooldown"]=9*60,
-             ["max-damage"]=0.15,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.125,
              ["min-damage"]=0.075,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.125,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60
         }},
 
         {"artillery-turret", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.15,
+             ["min-damage"]=0.05,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.15,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60
         }},
 
         {"assembling-machine", {
-             ["max-cooldown"]=25*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.2,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60
         }},
 
         {"beacon", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60
         }},
 
         {"boiler", {
-             ["max-cooldown"]=30*60,
-             ["min-cooldown"]=15*60,
-             ["max-damage"]=0.20,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60
         }},
 
         {"electric-pole", {
-             ["max-cooldown"]=40*60,
-             ["min-cooldown"]=25*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=20*60,
+             ["min-cooldown"]=15*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.075,
@@ -238,194 +238,194 @@ function buildSettings()
         }},
 
         {"electric-turret", {
-             ["max-cooldown"]=15*60,
-             ["min-cooldown"]=9*60,
-             ["max-damage"]=0.15,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.125,
              ["min-damage"]=0.075,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60
         }},
 
         {"fluid-turret", {
-             ["max-cooldown"]=15*60,
-             ["min-cooldown"]=9*60,
-             ["max-damage"]=0.15,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.125,
              ["min-damage"]=0.075,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60
         }},
 
         {"furnace", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.2,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60
         }},
 
         {"generator", {
-             ["max-cooldown"]=30*60,
-             ["min-cooldown"]=15*60,
-             ["max-damage"]=0.2,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"inserter", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"lab", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"lamp", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1
         }},
 
         {"mining-drill", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"offshore-pump", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"pump", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"radar", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"reactor", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"roboport", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"rocket-silo", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05,
-             ["max-downtime"]=10*60,
-             ["min-downtime"]=5*60,
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1,
+             ["max-downtime"]=12*60,
+             ["min-downtime"]=7*60,
         }},
 
         {"solar-panel", {
-             ["max-cooldown"]=20*60,
-             ["min-cooldown"]=10*60,
-             ["max-damage"]=0.25,
-             ["min-damage"]=0.1,
+             ["max-cooldown"]=12*60,
+             ["min-cooldown"]=7*60,
+             ["max-damage"]=0.10,
+             ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.1,
-             ["min-failure-rate"]=0.05
+             ["max-failure-rate"]=0.2,
+             ["min-failure-rate"]=0.1
         }}
     }
 
@@ -455,7 +455,7 @@ function buildSettings()
         if (attributes["max-downtime"]) then
             print("world.buildDowntime[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-downtime\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-downtime\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-downtime\"].value*60 }")
         end
-    end    
+    end
 end
 
 function buildLocaleSettingsName()

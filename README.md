@@ -14,8 +14,8 @@ Machines will periodically breakdown (become inactive for cooldown and take some
   - Labs
   - Crafting Machines
   - Mining Drill
-  - Rail Signals
-  - Chain Signals
+  - Rail Signals*
+  - Chain Signals*
   - Generators
   - Boilers
   - Reactors

@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 06. 2. 2021
+  Tweaks:
+    - Decreased default damage taken on breakdown for non-turrets to 15%
+    - Reduced breakdown icon size and moved to corner of entity
+    - Increased default min downtime to 500 seconds and max downtime to 800 seconds
+    - Decreased all research efficiency gains to 8%
+    - Increased cooldowns for roughly all entities by 2 minutes
+    - Increased downtime for roughly all entities by 2 minutes
+    - Reorganized map settings
+    - Increased failure rate for everything except electric poles to 10% min and 20% max
+  Bugfixes:
+    - Fixed breakdown logic calculating incorrect future tick events
+    - Fixed percentage in technology descriptions
+
+---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 19. 10. 2020
   Improvements:
@@ -10,4 +26,4 @@ Date: 19. 10. 2020
 Version: 1.0.0
 Date: 18. 10. 2020
   Features:
-    - Machines will periodically breakdown (become inactive and take some damage). Damaged machines take additional 
+    - Machines will periodically breakdown (become inactive and take some damage). Damaged machines take additional damage when breaking down.
