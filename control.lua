@@ -21,7 +21,7 @@ local world
 
 local function onModSettingsChange(event)
 
-    if event and (string.sub(event.setting, 1, 19) ~= "rampant-maintenance") then
+    if event and (string.sub(event.setting, 1, #"rampant-maintenance") ~= "rampant-maintenance") then
         return false
     end
 
@@ -185,8 +185,8 @@ local function onModSettingsChange(event)
                         collision_mask = {"player-layer","object-layer"}
                 })
                 for _,entity in pairs(entities) do
-                    local entityType = entity.type
-                    local build = world.buildLookup[entityType]
+                    -- local entityType = entity.type
+                    -- local build = world.buildLookup[entityType]
                     local len = world.entities.len+1
                     world.entities[len] = generate(game.tick, entity, world)
                     world.entities.len = len
@@ -222,7 +222,7 @@ local function onConfigChanged()
             time_to_live=0
         }
 
-        for i,p in ipairs(game.connected_players) do
+        for _,p in ipairs(game.connected_players) do
             p.print("Rampant Maintenance - Version 1.0.3")
         end
         world.version = 6
@@ -266,7 +266,7 @@ local function onTick(event)
     elseif (index == 40) then
         world.rollDamage = mRandom()
     end
-    for i=1,world.checksPerTick do
+    for _=1,world.checksPerTick do
         processEntity(tick)
     end
 end
