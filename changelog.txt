@@ -7,12 +7,12 @@ Date: 06. 2. 2021
     - Increased default min downtime to 500 seconds and max downtime to 800 seconds
     - Decreased all research efficiency gains to 8%
     - Increased cooldowns for roughly all entities by 2 minutes
-    - Increased downtime for roughly all entities by 2 minutes
     - Reorganized map settings
     - Increased failure rate for everything except electric poles to 10% min and 20% max
   Bugfixes:
     - Fixed breakdown logic calculating incorrect future tick events
     - Fixed percentage in technology descriptions
+    - Fixed artillery turret predicate for breakdown
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1

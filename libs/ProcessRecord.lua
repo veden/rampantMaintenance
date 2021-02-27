@@ -5,6 +5,7 @@ end
 local DEFINES_ENTITY_STATUS_LOW_POWER = defines.entity_status.low_power
 local DEFINES_ENTITY_STATUS_WORKING = defines.entity_status.working
 local DEFINES_ENTITY_STATUS_LOW_INPUT_FLUID = defines.entity_status.low_input_fluid
+local DEFINES_ENTITY_STATUS_NO_AMMO = defines.entity_status.no_ammo
 
 local mMax = math.max
 
@@ -187,7 +188,7 @@ processRecord["pump"] = function (entity)
 end
 
 processRecord["artillery-turret"] = function (entity)
-    return entity.shooting_target ~= nil
+    return entity.status ~= DEFINES_ENTITY_STATUS_NO_AMMO
 end
 
 processRecord["electric-pole"] = function (entity)
