@@ -222,12 +222,13 @@ local function onConfigChanged()
             time_to_live=0
         }
 
+        onModSettingsChange()
+
         for _,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.0.3")
+            p.print("Rampant Maintenance - Version 1.0.4")
         end
         world.version = 6
     end
-    onModSettingsChange()
 end
 
 local function processEntity(tick)
