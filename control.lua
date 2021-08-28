@@ -12,6 +12,7 @@ local sFind = string.find
 
 local generate = buildRecord.generate
 local process = processRecord.process
+local activateEntity = processRecord.activateEntity
 
 -- local references
 
@@ -225,7 +226,7 @@ local function onConfigChanged()
         onModSettingsChange()
 
         for _,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.0.4")
+            p.print("Rampant Maintenance - Version 1.1.0")
         end
         world.version = 6
     end
@@ -250,6 +251,13 @@ local function processEntity(tick)
         world.entities.len = world.entityFill
         world.entityCursor = 1
         world.entityFill = 1
+    end
+end
+
+local function onPlayerRepaired(event)
+    local entity = event.entity
+    if entity.valid and (entity.get_health_ratio() == 1) then
+        activateEntity(entity)
     end
 end
 
@@ -327,6 +335,7 @@ end
 
 -- hooks
 
+script.on_event(defines.events.on_player_repaired_entity, onPlayerRepaired)
 script.on_event(defines.events.on_tick, onTick)
 script.on_init(onInit)
 script.on_load(onLoad)

@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 27. 8. 2021
+  Improvements:
+    - When the player fully repairs a broke down machine, it will be reactived. Currently the brokedown icon will remain until the machine would have restarted naturally. Robots repairing a deactivated building do not trigger this effect.
+
+---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 16. 4. 2021
   Bugfixes:

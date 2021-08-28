@@ -101,6 +101,13 @@ function processRecord.process(predicate, entityRecord, tick, world)
     end
 end
 
+function processRecord.activateEntity(entity)
+    local entityType = entity.type
+    if (not inNonActiveSet[entityType]) and (not entity.active) then
+        entity.active = true
+    end
+end
+
 processRecord["inserter"] = function (entity)
     return entity.held_stack.valid_for_read
 end
