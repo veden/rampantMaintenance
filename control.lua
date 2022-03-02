@@ -186,8 +186,6 @@ local function onModSettingsChange(event)
                         collision_mask = {"player-layer","object-layer"}
                 })
                 for _,entity in pairs(entities) do
-                    -- local entityType = entity.type
-                    -- local build = world.buildLookup[entityType]
                     local len = world.entities.len+1
                     world.entities[len] = generate(game.tick, entity, world)
                     world.entities.len = len
@@ -226,7 +224,7 @@ local function onConfigChanged()
         onModSettingsChange()
 
         for _,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.1.0")
+            p.print("Rampant Maintenance - Version 1.2.0")
         end
         world.version = 6
     end
