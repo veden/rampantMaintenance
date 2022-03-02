@@ -3,6 +3,8 @@ Version: 1.2.0
 Date: 01. 03. 2022
   Improvements:
     - Modified RND to be rolled per entity checked instead of for a set of entities
+  Bugfixes:
+    - Entities that didn't have a predicate check would not be cleared
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0

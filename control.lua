@@ -238,13 +238,13 @@ local function processEntity(tick)
         local entityData = world.entities[cursor]
         if entityData and entityData.e.valid then
             local entityType = entityData.e.type
-            local predicate = processRecord[entityType];
+            local predicate = processRecord[entityType]
             if predicate then
                 process(predicate, entityData, tick, world)
+                local fillCursor = world.entityFill
+                world.entities[fillCursor] = entityData
+                world.entityFill = fillCursor + 1
             end
-            local fillCursor = world.entityFill
-            world.entities[fillCursor] = entityData
-            world.entityFill = fillCursor + 1
         end
         world.entityCursor = cursor + 1
     else
