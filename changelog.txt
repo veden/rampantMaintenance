@@ -3,6 +3,9 @@ Version: 1.2.0
 Date: 01. 03. 2022
   Improvements:
     - Modified RND to be rolled per entity checked instead of for a set of entities
+    - Added MTBF, MTTR, Active, Inactive, Uptime, Failure Count
+    - Added popup metrics when hovering entities that can breakdown
+    - Added tile modifier to modify breakdowns, damage, and downtime
   Bugfixes:
     - Entities that didn't have a predicate check would not be cleared
 
