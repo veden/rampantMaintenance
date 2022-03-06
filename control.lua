@@ -2,23 +2,54 @@
 
 local buildRecord = require("libs/BuildRecord")
 local processRecord = require("libs/ProcessRecord")
+local constants = require("libs/Constants")
 
 -- imported functions
 
-local mLog10 = math.log10
 local mRandom = math.random
-local mSqrt = math.sqrt
-local sFind = string.find
 
 local generate = buildRecord.generate
 local process = processRecord.process
 local activateEntity = processRecord.activateEntity
+local recordSelection = processRecord.recordSelection
 
 -- local references
 
 local world
 
+-- constants
+
+local TICKS_PER_FIVE_HOURS = constants.TICKS_PER_FIVE_HOURS
+local TICKS_PER_MINUTE = constants.TICKS_PER_MINUTE
+local TICKS_PER_HOUR = constants.TICKS_PER_HOUR
+
+local ALL_ENTITY_TYPES = constants.ALL_ENTITY_TYPES
+local ENTITES_WITHOUT_DOWNTIME = constants.ENTITES_WITHOUT_DOWNTIME
+
+local POPUP_TTL = constants.POPUP_TTL
+
+local RESEARCH_LOOKUP = constants.RESEARCH_LOOKUP
+
 -- module code
+
+local function roundToNearest(number, multiple)
+    local num = number + (multiple * 0.5)
+    return num - (num % multiple)
+end
+
+
+local function convertToTimeScale(v)
+    local ts
+    local suffix
+    if v < TICKS_PER_FIVE_HOURS then
+        ts = roundToNearest(v / TICKS_PER_MINUTE, 0.01)
+        suffix = "(m)"
+    else
+        ts = roundToNearest(v / TICKS_PER_HOUR, 0.001)
+        suffix = "(h)"
+    end
+    return tostring(ts) .. suffix
+end
 
 local function onModSettingsChange(event)
 
@@ -40,140 +71,43 @@ local function onModSettingsChange(event)
     world.buildDowntime = {}
     world.checksPerTick = settings.global["rampant-maintenance-checks-per-tick"].value
 
+    for _,name in pairs(ALL_ENTITY_TYPES) do
+        world.buildLookup[name] = settings.global["rampant-maintenance-use-" .. name].value
+        world.buildCooldown[name] = {
+            ["low"] = (settings.global["rampant-maintenance-" .. name .."-min-cooldown"].value * 60),
+            ["range"] = (settings.global["rampant-maintenance-" .. name .. "-max-cooldown"].value * 60) - (settings.global["rampant-maintenance-" .. name .. "-min-cooldown"].value * 60)
+        }
+        world.buildDamage[name] = {
+            ["low"] = settings.global["rampant-maintenance-" .. name .."-min-damage"].value,
+            ["range"] = settings.global["rampant-maintenance-" .. name .. "-max-damage"].value - settings.global["rampant-maintenance-" .. name .. "-min-damage"].value
+        }
+        world.buildDamageFailure[name] = {
+            ["low"] = settings.global["rampant-maintenance-" .. name .."-min-damage-failure"].value,
+            ["range"] = settings.global["rampant-maintenance-" .. name .. "-max-damage-failure"].value - settings.global["rampant-maintenance-" .. name .. "-min-damage-failure"].value
+        }
+        world.buildFailure[name] = {
+            ["low"] = settings.global["rampant-maintenance-" .. name .."-min-failure-rate"].value,
+            ["range"] = settings.global["rampant-maintenance-" .. name .. "-max-failure-rate"].value - settings.global["rampant-maintenance-" .. name .. "-min-failure-rate"].value
+        }
+        if not ENTITES_WITHOUT_DOWNTIME[name] then
+            world.buildDowntime[name] = {
+                ["low"] = (settings.global["rampant-maintenance-" .. name .."-min-downtime"].value * 60),
+                ["range"] = (settings.global["rampant-maintenance-" .. name .. "-max-downtime"].value * 60) - (settings.global["rampant-maintenance-" .. name .. "-min-downtime"].value * 60)
+            }
+        end
+    end
+
     world.showBreakdownSprite = settings.global["rampant-maintenance-show-breakdown-sprite"].value
-    world.buildLookup["accumulator"] = settings.global["rampant-maintenance-use-accumulator"].value
-    world.buildCooldown["accumulator"] = { settings.global["rampant-maintenance-accumulator-min-cooldown"].value*60, settings.global["rampant-maintenance-accumulator-max-cooldown"].value*60-settings.global["rampant-maintenance-accumulator-min-cooldown"].value*60 }
-    world.buildDamage["accumulator"] = { settings.global["rampant-maintenance-accumulator-min-damage"].value, settings.global["rampant-maintenance-accumulator-max-damage"].value-settings.global["rampant-maintenance-accumulator-min-damage"].value }
-    world.buildDamageFailure["accumulator"] = { settings.global["rampant-maintenance-accumulator-min-damage-failure"].value, settings.global["rampant-maintenance-accumulator-max-damage-failure"].value-settings.global["rampant-maintenance-accumulator-min-damage-failure"].value }
-    world.buildFailure["accumulator"] = { settings.global["rampant-maintenance-accumulator-min-failure-rate"].value, settings.global["rampant-maintenance-accumulator-max-failure-rate"].value-settings.global["rampant-maintenance-accumulator-min-failure-rate"].value }
-    world.buildLookup["ammo-turret"] = settings.global["rampant-maintenance-use-ammo-turret"].value
-    world.buildCooldown["ammo-turret"] = { settings.global["rampant-maintenance-ammo-turret-min-cooldown"].value*60, settings.global["rampant-maintenance-ammo-turret-max-cooldown"].value*60-settings.global["rampant-maintenance-ammo-turret-min-cooldown"].value*60 }
-    world.buildDamage["ammo-turret"] = { settings.global["rampant-maintenance-ammo-turret-min-damage"].value, settings.global["rampant-maintenance-ammo-turret-max-damage"].value-settings.global["rampant-maintenance-ammo-turret-min-damage"].value }
-    world.buildDamageFailure["ammo-turret"] = { settings.global["rampant-maintenance-ammo-turret-min-damage-failure"].value, settings.global["rampant-maintenance-ammo-turret-max-damage-failure"].value-settings.global["rampant-maintenance-ammo-turret-min-damage-failure"].value }
-    world.buildFailure["ammo-turret"] = { settings.global["rampant-maintenance-ammo-turret-min-failure-rate"].value, settings.global["rampant-maintenance-ammo-turret-max-failure-rate"].value-settings.global["rampant-maintenance-ammo-turret-min-failure-rate"].value }
-    world.buildDowntime["ammo-turret"] = { settings.global["rampant-maintenance-ammo-turret-min-downtime"].value*60, settings.global["rampant-maintenance-ammo-turret-max-downtime"].value*60-settings.global["rampant-maintenance-ammo-turret-min-downtime"].value*60 }
-    world.buildLookup["artillery-turret"] = settings.global["rampant-maintenance-use-artillery-turret"].value
-    world.buildCooldown["artillery-turret"] = { settings.global["rampant-maintenance-artillery-turret-min-cooldown"].value*60, settings.global["rampant-maintenance-artillery-turret-max-cooldown"].value*60-settings.global["rampant-maintenance-artillery-turret-min-cooldown"].value*60 }
-    world.buildDamage["artillery-turret"] = { settings.global["rampant-maintenance-artillery-turret-min-damage"].value, settings.global["rampant-maintenance-artillery-turret-max-damage"].value-settings.global["rampant-maintenance-artillery-turret-min-damage"].value }
-    world.buildDamageFailure["artillery-turret"] = { settings.global["rampant-maintenance-artillery-turret-min-damage-failure"].value, settings.global["rampant-maintenance-artillery-turret-max-damage-failure"].value-settings.global["rampant-maintenance-artillery-turret-min-damage-failure"].value }
-    world.buildFailure["artillery-turret"] = { settings.global["rampant-maintenance-artillery-turret-min-failure-rate"].value, settings.global["rampant-maintenance-artillery-turret-max-failure-rate"].value-settings.global["rampant-maintenance-artillery-turret-min-failure-rate"].value }
-    world.buildDowntime["artillery-turret"] = { settings.global["rampant-maintenance-artillery-turret-min-downtime"].value*60, settings.global["rampant-maintenance-artillery-turret-max-downtime"].value*60-settings.global["rampant-maintenance-artillery-turret-min-downtime"].value*60 }
-    world.buildLookup["assembling-machine"] = settings.global["rampant-maintenance-use-assembling-machine"].value
-    world.buildCooldown["assembling-machine"] = { settings.global["rampant-maintenance-assembling-machine-min-cooldown"].value*60, settings.global["rampant-maintenance-assembling-machine-max-cooldown"].value*60-settings.global["rampant-maintenance-assembling-machine-min-cooldown"].value*60 }
-    world.buildDamage["assembling-machine"] = { settings.global["rampant-maintenance-assembling-machine-min-damage"].value, settings.global["rampant-maintenance-assembling-machine-max-damage"].value-settings.global["rampant-maintenance-assembling-machine-min-damage"].value }
-    world.buildDamageFailure["assembling-machine"] = { settings.global["rampant-maintenance-assembling-machine-min-damage-failure"].value, settings.global["rampant-maintenance-assembling-machine-max-damage-failure"].value-settings.global["rampant-maintenance-assembling-machine-min-damage-failure"].value }
-    world.buildFailure["assembling-machine"] = { settings.global["rampant-maintenance-assembling-machine-min-failure-rate"].value, settings.global["rampant-maintenance-assembling-machine-max-failure-rate"].value-settings.global["rampant-maintenance-assembling-machine-min-failure-rate"].value }
-    world.buildDowntime["assembling-machine"] = { settings.global["rampant-maintenance-assembling-machine-min-downtime"].value*60, settings.global["rampant-maintenance-assembling-machine-max-downtime"].value*60-settings.global["rampant-maintenance-assembling-machine-min-downtime"].value*60 }
-    world.buildLookup["beacon"] = settings.global["rampant-maintenance-use-beacon"].value
-    world.buildCooldown["beacon"] = { settings.global["rampant-maintenance-beacon-min-cooldown"].value*60, settings.global["rampant-maintenance-beacon-max-cooldown"].value*60-settings.global["rampant-maintenance-beacon-min-cooldown"].value*60 }
-    world.buildDamage["beacon"] = { settings.global["rampant-maintenance-beacon-min-damage"].value, settings.global["rampant-maintenance-beacon-max-damage"].value-settings.global["rampant-maintenance-beacon-min-damage"].value }
-    world.buildDamageFailure["beacon"] = { settings.global["rampant-maintenance-beacon-min-damage-failure"].value, settings.global["rampant-maintenance-beacon-max-damage-failure"].value-settings.global["rampant-maintenance-beacon-min-damage-failure"].value }
-    world.buildFailure["beacon"] = { settings.global["rampant-maintenance-beacon-min-failure-rate"].value, settings.global["rampant-maintenance-beacon-max-failure-rate"].value-settings.global["rampant-maintenance-beacon-min-failure-rate"].value }
-    world.buildDowntime["beacon"] = { settings.global["rampant-maintenance-beacon-min-downtime"].value*60, settings.global["rampant-maintenance-beacon-max-downtime"].value*60-settings.global["rampant-maintenance-beacon-min-downtime"].value*60 }
-    world.buildLookup["boiler"] = settings.global["rampant-maintenance-use-boiler"].value
-    world.buildCooldown["boiler"] = { settings.global["rampant-maintenance-boiler-min-cooldown"].value*60, settings.global["rampant-maintenance-boiler-max-cooldown"].value*60-settings.global["rampant-maintenance-boiler-min-cooldown"].value*60 }
-    world.buildDamage["boiler"] = { settings.global["rampant-maintenance-boiler-min-damage"].value, settings.global["rampant-maintenance-boiler-max-damage"].value-settings.global["rampant-maintenance-boiler-min-damage"].value }
-    world.buildDamageFailure["boiler"] = { settings.global["rampant-maintenance-boiler-min-damage-failure"].value, settings.global["rampant-maintenance-boiler-max-damage-failure"].value-settings.global["rampant-maintenance-boiler-min-damage-failure"].value }
-    world.buildFailure["boiler"] = { settings.global["rampant-maintenance-boiler-min-failure-rate"].value, settings.global["rampant-maintenance-boiler-max-failure-rate"].value-settings.global["rampant-maintenance-boiler-min-failure-rate"].value }
-    world.buildDowntime["boiler"] = { settings.global["rampant-maintenance-boiler-min-downtime"].value*60, settings.global["rampant-maintenance-boiler-max-downtime"].value*60-settings.global["rampant-maintenance-boiler-min-downtime"].value*60 }
-    world.buildLookup["electric-pole"] = settings.global["rampant-maintenance-use-electric-pole"].value
-    world.buildCooldown["electric-pole"] = { settings.global["rampant-maintenance-electric-pole-min-cooldown"].value*60, settings.global["rampant-maintenance-electric-pole-max-cooldown"].value*60-settings.global["rampant-maintenance-electric-pole-min-cooldown"].value*60 }
-    world.buildDamage["electric-pole"] = { settings.global["rampant-maintenance-electric-pole-min-damage"].value, settings.global["rampant-maintenance-electric-pole-max-damage"].value-settings.global["rampant-maintenance-electric-pole-min-damage"].value }
-    world.buildDamageFailure["electric-pole"] = { settings.global["rampant-maintenance-electric-pole-min-damage-failure"].value, settings.global["rampant-maintenance-electric-pole-max-damage-failure"].value-settings.global["rampant-maintenance-electric-pole-min-damage-failure"].value }
-    world.buildFailure["electric-pole"] = { settings.global["rampant-maintenance-electric-pole-min-failure-rate"].value, settings.global["rampant-maintenance-electric-pole-max-failure-rate"].value-settings.global["rampant-maintenance-electric-pole-min-failure-rate"].value }
-    world.buildLookup["electric-turret"] = settings.global["rampant-maintenance-use-electric-turret"].value
-    world.buildCooldown["electric-turret"] = { settings.global["rampant-maintenance-electric-turret-min-cooldown"].value*60, settings.global["rampant-maintenance-electric-turret-max-cooldown"].value*60-settings.global["rampant-maintenance-electric-turret-min-cooldown"].value*60 }
-    world.buildDamage["electric-turret"] = { settings.global["rampant-maintenance-electric-turret-min-damage"].value, settings.global["rampant-maintenance-electric-turret-max-damage"].value-settings.global["rampant-maintenance-electric-turret-min-damage"].value }
-    world.buildDamageFailure["electric-turret"] = { settings.global["rampant-maintenance-electric-turret-min-damage-failure"].value, settings.global["rampant-maintenance-electric-turret-max-damage-failure"].value-settings.global["rampant-maintenance-electric-turret-min-damage-failure"].value }
-    world.buildFailure["electric-turret"] = { settings.global["rampant-maintenance-electric-turret-min-failure-rate"].value, settings.global["rampant-maintenance-electric-turret-max-failure-rate"].value-settings.global["rampant-maintenance-electric-turret-min-failure-rate"].value }
-    world.buildDowntime["electric-turret"] = { settings.global["rampant-maintenance-electric-turret-min-downtime"].value*60, settings.global["rampant-maintenance-electric-turret-max-downtime"].value*60-settings.global["rampant-maintenance-electric-turret-min-downtime"].value*60 }
-    world.buildLookup["fluid-turret"] = settings.global["rampant-maintenance-use-fluid-turret"].value
-    world.buildCooldown["fluid-turret"] = { settings.global["rampant-maintenance-fluid-turret-min-cooldown"].value*60, settings.global["rampant-maintenance-fluid-turret-max-cooldown"].value*60-settings.global["rampant-maintenance-fluid-turret-min-cooldown"].value*60 }
-    world.buildDamage["fluid-turret"] = { settings.global["rampant-maintenance-fluid-turret-min-damage"].value, settings.global["rampant-maintenance-fluid-turret-max-damage"].value-settings.global["rampant-maintenance-fluid-turret-min-damage"].value }
-    world.buildDamageFailure["fluid-turret"] = { settings.global["rampant-maintenance-fluid-turret-min-damage-failure"].value, settings.global["rampant-maintenance-fluid-turret-max-damage-failure"].value-settings.global["rampant-maintenance-fluid-turret-min-damage-failure"].value }
-    world.buildFailure["fluid-turret"] = { settings.global["rampant-maintenance-fluid-turret-min-failure-rate"].value, settings.global["rampant-maintenance-fluid-turret-max-failure-rate"].value-settings.global["rampant-maintenance-fluid-turret-min-failure-rate"].value }
-    world.buildDowntime["fluid-turret"] = { settings.global["rampant-maintenance-fluid-turret-min-downtime"].value*60, settings.global["rampant-maintenance-fluid-turret-max-downtime"].value*60-settings.global["rampant-maintenance-fluid-turret-min-downtime"].value*60 }
-    world.buildLookup["furnace"] = settings.global["rampant-maintenance-use-furnace"].value
-    world.buildCooldown["furnace"] = { settings.global["rampant-maintenance-furnace-min-cooldown"].value*60, settings.global["rampant-maintenance-furnace-max-cooldown"].value*60-settings.global["rampant-maintenance-furnace-min-cooldown"].value*60 }
-    world.buildDamage["furnace"] = { settings.global["rampant-maintenance-furnace-min-damage"].value, settings.global["rampant-maintenance-furnace-max-damage"].value-settings.global["rampant-maintenance-furnace-min-damage"].value }
-    world.buildDamageFailure["furnace"] = { settings.global["rampant-maintenance-furnace-min-damage-failure"].value, settings.global["rampant-maintenance-furnace-max-damage-failure"].value-settings.global["rampant-maintenance-furnace-min-damage-failure"].value }
-    world.buildFailure["furnace"] = { settings.global["rampant-maintenance-furnace-min-failure-rate"].value, settings.global["rampant-maintenance-furnace-max-failure-rate"].value-settings.global["rampant-maintenance-furnace-min-failure-rate"].value }
-    world.buildDowntime["furnace"] = { settings.global["rampant-maintenance-furnace-min-downtime"].value*60, settings.global["rampant-maintenance-furnace-max-downtime"].value*60-settings.global["rampant-maintenance-furnace-min-downtime"].value*60 }
-    world.buildLookup["generator"] = settings.global["rampant-maintenance-use-generator"].value
-    world.buildCooldown["generator"] = { settings.global["rampant-maintenance-generator-min-cooldown"].value*60, settings.global["rampant-maintenance-generator-max-cooldown"].value*60-settings.global["rampant-maintenance-generator-min-cooldown"].value*60 }
-    world.buildDamage["generator"] = { settings.global["rampant-maintenance-generator-min-damage"].value, settings.global["rampant-maintenance-generator-max-damage"].value-settings.global["rampant-maintenance-generator-min-damage"].value }
-    world.buildDamageFailure["generator"] = { settings.global["rampant-maintenance-generator-min-damage-failure"].value, settings.global["rampant-maintenance-generator-max-damage-failure"].value-settings.global["rampant-maintenance-generator-min-damage-failure"].value }
-    world.buildFailure["generator"] = { settings.global["rampant-maintenance-generator-min-failure-rate"].value, settings.global["rampant-maintenance-generator-max-failure-rate"].value-settings.global["rampant-maintenance-generator-min-failure-rate"].value }
-    world.buildDowntime["generator"] = { settings.global["rampant-maintenance-generator-min-downtime"].value*60, settings.global["rampant-maintenance-generator-max-downtime"].value*60-settings.global["rampant-maintenance-generator-min-downtime"].value*60 }
-    world.buildLookup["inserter"] = settings.global["rampant-maintenance-use-inserter"].value
-    world.buildCooldown["inserter"] = { settings.global["rampant-maintenance-inserter-min-cooldown"].value*60, settings.global["rampant-maintenance-inserter-max-cooldown"].value*60-settings.global["rampant-maintenance-inserter-min-cooldown"].value*60 }
-    world.buildDamage["inserter"] = { settings.global["rampant-maintenance-inserter-min-damage"].value, settings.global["rampant-maintenance-inserter-max-damage"].value-settings.global["rampant-maintenance-inserter-min-damage"].value }
-    world.buildDamageFailure["inserter"] = { settings.global["rampant-maintenance-inserter-min-damage-failure"].value, settings.global["rampant-maintenance-inserter-max-damage-failure"].value-settings.global["rampant-maintenance-inserter-min-damage-failure"].value }
-    world.buildFailure["inserter"] = { settings.global["rampant-maintenance-inserter-min-failure-rate"].value, settings.global["rampant-maintenance-inserter-max-failure-rate"].value-settings.global["rampant-maintenance-inserter-min-failure-rate"].value }
-    world.buildDowntime["inserter"] = { settings.global["rampant-maintenance-inserter-min-downtime"].value*60, settings.global["rampant-maintenance-inserter-max-downtime"].value*60-settings.global["rampant-maintenance-inserter-min-downtime"].value*60 }
-    world.buildLookup["lab"] = settings.global["rampant-maintenance-use-lab"].value
-    world.buildCooldown["lab"] = { settings.global["rampant-maintenance-lab-min-cooldown"].value*60, settings.global["rampant-maintenance-lab-max-cooldown"].value*60-settings.global["rampant-maintenance-lab-min-cooldown"].value*60 }
-    world.buildDamage["lab"] = { settings.global["rampant-maintenance-lab-min-damage"].value, settings.global["rampant-maintenance-lab-max-damage"].value-settings.global["rampant-maintenance-lab-min-damage"].value }
-    world.buildDamageFailure["lab"] = { settings.global["rampant-maintenance-lab-min-damage-failure"].value, settings.global["rampant-maintenance-lab-max-damage-failure"].value-settings.global["rampant-maintenance-lab-min-damage-failure"].value }
-    world.buildFailure["lab"] = { settings.global["rampant-maintenance-lab-min-failure-rate"].value, settings.global["rampant-maintenance-lab-max-failure-rate"].value-settings.global["rampant-maintenance-lab-min-failure-rate"].value }
-    world.buildDowntime["lab"] = { settings.global["rampant-maintenance-lab-min-downtime"].value*60, settings.global["rampant-maintenance-lab-max-downtime"].value*60-settings.global["rampant-maintenance-lab-min-downtime"].value*60 }
-    world.buildLookup["lamp"] = settings.global["rampant-maintenance-use-lamp"].value
-    world.buildCooldown["lamp"] = { settings.global["rampant-maintenance-lamp-min-cooldown"].value*60, settings.global["rampant-maintenance-lamp-max-cooldown"].value*60-settings.global["rampant-maintenance-lamp-min-cooldown"].value*60 }
-    world.buildDamage["lamp"] = { settings.global["rampant-maintenance-lamp-min-damage"].value, settings.global["rampant-maintenance-lamp-max-damage"].value-settings.global["rampant-maintenance-lamp-min-damage"].value }
-    world.buildDamageFailure["lamp"] = { settings.global["rampant-maintenance-lamp-min-damage-failure"].value, settings.global["rampant-maintenance-lamp-max-damage-failure"].value-settings.global["rampant-maintenance-lamp-min-damage-failure"].value }
-    world.buildFailure["lamp"] = { settings.global["rampant-maintenance-lamp-min-failure-rate"].value, settings.global["rampant-maintenance-lamp-max-failure-rate"].value-settings.global["rampant-maintenance-lamp-min-failure-rate"].value }
-    world.buildLookup["mining-drill"] = settings.global["rampant-maintenance-use-mining-drill"].value
-    world.buildCooldown["mining-drill"] = { settings.global["rampant-maintenance-mining-drill-min-cooldown"].value*60, settings.global["rampant-maintenance-mining-drill-max-cooldown"].value*60-settings.global["rampant-maintenance-mining-drill-min-cooldown"].value*60 }
-    world.buildDamage["mining-drill"] = { settings.global["rampant-maintenance-mining-drill-min-damage"].value, settings.global["rampant-maintenance-mining-drill-max-damage"].value-settings.global["rampant-maintenance-mining-drill-min-damage"].value }
-    world.buildDamageFailure["mining-drill"] = { settings.global["rampant-maintenance-mining-drill-min-damage-failure"].value, settings.global["rampant-maintenance-mining-drill-max-damage-failure"].value-settings.global["rampant-maintenance-mining-drill-min-damage-failure"].value }
-    world.buildFailure["mining-drill"] = { settings.global["rampant-maintenance-mining-drill-min-failure-rate"].value, settings.global["rampant-maintenance-mining-drill-max-failure-rate"].value-settings.global["rampant-maintenance-mining-drill-min-failure-rate"].value }
-    world.buildDowntime["mining-drill"] = { settings.global["rampant-maintenance-mining-drill-min-downtime"].value*60, settings.global["rampant-maintenance-mining-drill-max-downtime"].value*60-settings.global["rampant-maintenance-mining-drill-min-downtime"].value*60 }
-    world.buildLookup["offshore-pump"] = settings.global["rampant-maintenance-use-offshore-pump"].value
-    world.buildCooldown["offshore-pump"] = { settings.global["rampant-maintenance-offshore-pump-min-cooldown"].value*60, settings.global["rampant-maintenance-offshore-pump-max-cooldown"].value*60-settings.global["rampant-maintenance-offshore-pump-min-cooldown"].value*60 }
-    world.buildDamage["offshore-pump"] = { settings.global["rampant-maintenance-offshore-pump-min-damage"].value, settings.global["rampant-maintenance-offshore-pump-max-damage"].value-settings.global["rampant-maintenance-offshore-pump-min-damage"].value }
-    world.buildDamageFailure["offshore-pump"] = { settings.global["rampant-maintenance-offshore-pump-min-damage-failure"].value, settings.global["rampant-maintenance-offshore-pump-max-damage-failure"].value-settings.global["rampant-maintenance-offshore-pump-min-damage-failure"].value }
-    world.buildFailure["offshore-pump"] = { settings.global["rampant-maintenance-offshore-pump-min-failure-rate"].value, settings.global["rampant-maintenance-offshore-pump-max-failure-rate"].value-settings.global["rampant-maintenance-offshore-pump-min-failure-rate"].value }
-    world.buildDowntime["offshore-pump"] = { settings.global["rampant-maintenance-offshore-pump-min-downtime"].value*60, settings.global["rampant-maintenance-offshore-pump-max-downtime"].value*60-settings.global["rampant-maintenance-offshore-pump-min-downtime"].value*60 }
-    world.buildLookup["pump"] = settings.global["rampant-maintenance-use-pump"].value
-    world.buildCooldown["pump"] = { settings.global["rampant-maintenance-pump-min-cooldown"].value*60, settings.global["rampant-maintenance-pump-max-cooldown"].value*60-settings.global["rampant-maintenance-pump-min-cooldown"].value*60 }
-    world.buildDamage["pump"] = { settings.global["rampant-maintenance-pump-min-damage"].value, settings.global["rampant-maintenance-pump-max-damage"].value-settings.global["rampant-maintenance-pump-min-damage"].value }
-    world.buildDamageFailure["pump"] = { settings.global["rampant-maintenance-pump-min-damage-failure"].value, settings.global["rampant-maintenance-pump-max-damage-failure"].value-settings.global["rampant-maintenance-pump-min-damage-failure"].value }
-    world.buildFailure["pump"] = { settings.global["rampant-maintenance-pump-min-failure-rate"].value, settings.global["rampant-maintenance-pump-max-failure-rate"].value-settings.global["rampant-maintenance-pump-min-failure-rate"].value }
-    world.buildDowntime["pump"] = { settings.global["rampant-maintenance-pump-min-downtime"].value*60, settings.global["rampant-maintenance-pump-max-downtime"].value*60-settings.global["rampant-maintenance-pump-min-downtime"].value*60 }
-    world.buildLookup["radar"] = settings.global["rampant-maintenance-use-radar"].value
-    world.buildCooldown["radar"] = { settings.global["rampant-maintenance-radar-min-cooldown"].value*60, settings.global["rampant-maintenance-radar-max-cooldown"].value*60-settings.global["rampant-maintenance-radar-min-cooldown"].value*60 }
-    world.buildDamage["radar"] = { settings.global["rampant-maintenance-radar-min-damage"].value, settings.global["rampant-maintenance-radar-max-damage"].value-settings.global["rampant-maintenance-radar-min-damage"].value }
-    world.buildDamageFailure["radar"] = { settings.global["rampant-maintenance-radar-min-damage-failure"].value, settings.global["rampant-maintenance-radar-max-damage-failure"].value-settings.global["rampant-maintenance-radar-min-damage-failure"].value }
-    world.buildFailure["radar"] = { settings.global["rampant-maintenance-radar-min-failure-rate"].value, settings.global["rampant-maintenance-radar-max-failure-rate"].value-settings.global["rampant-maintenance-radar-min-failure-rate"].value }
-    world.buildDowntime["radar"] = { settings.global["rampant-maintenance-radar-min-downtime"].value*60, settings.global["rampant-maintenance-radar-max-downtime"].value*60-settings.global["rampant-maintenance-radar-min-downtime"].value*60 }
-    world.buildLookup["reactor"] = settings.global["rampant-maintenance-use-reactor"].value
-    world.buildCooldown["reactor"] = { settings.global["rampant-maintenance-reactor-min-cooldown"].value*60, settings.global["rampant-maintenance-reactor-max-cooldown"].value*60-settings.global["rampant-maintenance-reactor-min-cooldown"].value*60 }
-    world.buildDamage["reactor"] = { settings.global["rampant-maintenance-reactor-min-damage"].value, settings.global["rampant-maintenance-reactor-max-damage"].value-settings.global["rampant-maintenance-reactor-min-damage"].value }
-    world.buildDamageFailure["reactor"] = { settings.global["rampant-maintenance-reactor-min-damage-failure"].value, settings.global["rampant-maintenance-reactor-max-damage-failure"].value-settings.global["rampant-maintenance-reactor-min-damage-failure"].value }
-    world.buildFailure["reactor"] = { settings.global["rampant-maintenance-reactor-min-failure-rate"].value, settings.global["rampant-maintenance-reactor-max-failure-rate"].value-settings.global["rampant-maintenance-reactor-min-failure-rate"].value }
-    world.buildDowntime["reactor"] = { settings.global["rampant-maintenance-reactor-min-downtime"].value*60, settings.global["rampant-maintenance-reactor-max-downtime"].value*60-settings.global["rampant-maintenance-reactor-min-downtime"].value*60 }
-    world.buildLookup["roboport"] = settings.global["rampant-maintenance-use-roboport"].value
-    world.buildCooldown["roboport"] = { settings.global["rampant-maintenance-roboport-min-cooldown"].value*60, settings.global["rampant-maintenance-roboport-max-cooldown"].value*60-settings.global["rampant-maintenance-roboport-min-cooldown"].value*60 }
-    world.buildDamage["roboport"] = { settings.global["rampant-maintenance-roboport-min-damage"].value, settings.global["rampant-maintenance-roboport-max-damage"].value-settings.global["rampant-maintenance-roboport-min-damage"].value }
-    world.buildDamageFailure["roboport"] = { settings.global["rampant-maintenance-roboport-min-damage-failure"].value, settings.global["rampant-maintenance-roboport-max-damage-failure"].value-settings.global["rampant-maintenance-roboport-min-damage-failure"].value }
-    world.buildFailure["roboport"] = { settings.global["rampant-maintenance-roboport-min-failure-rate"].value, settings.global["rampant-maintenance-roboport-max-failure-rate"].value-settings.global["rampant-maintenance-roboport-min-failure-rate"].value }
-    world.buildDowntime["roboport"] = { settings.global["rampant-maintenance-roboport-min-downtime"].value*60, settings.global["rampant-maintenance-roboport-max-downtime"].value*60-settings.global["rampant-maintenance-roboport-min-downtime"].value*60 }
-    world.buildLookup["rocket-silo"] = settings.global["rampant-maintenance-use-rocket-silo"].value
-    world.buildCooldown["rocket-silo"] = { settings.global["rampant-maintenance-rocket-silo-min-cooldown"].value*60, settings.global["rampant-maintenance-rocket-silo-max-cooldown"].value*60-settings.global["rampant-maintenance-rocket-silo-min-cooldown"].value*60 }
-    world.buildDamage["rocket-silo"] = { settings.global["rampant-maintenance-rocket-silo-min-damage"].value, settings.global["rampant-maintenance-rocket-silo-max-damage"].value-settings.global["rampant-maintenance-rocket-silo-min-damage"].value }
-    world.buildDamageFailure["rocket-silo"] = { settings.global["rampant-maintenance-rocket-silo-min-damage-failure"].value, settings.global["rampant-maintenance-rocket-silo-max-damage-failure"].value-settings.global["rampant-maintenance-rocket-silo-min-damage-failure"].value }
-    world.buildFailure["rocket-silo"] = { settings.global["rampant-maintenance-rocket-silo-min-failure-rate"].value, settings.global["rampant-maintenance-rocket-silo-max-failure-rate"].value-settings.global["rampant-maintenance-rocket-silo-min-failure-rate"].value }
-    world.buildDowntime["rocket-silo"] = { settings.global["rampant-maintenance-rocket-silo-min-downtime"].value*60, settings.global["rampant-maintenance-rocket-silo-max-downtime"].value*60-settings.global["rampant-maintenance-rocket-silo-min-downtime"].value*60 }
-    world.buildLookup["solar-panel"] = settings.global["rampant-maintenance-use-solar-panel"].value
-    world.buildCooldown["solar-panel"] = { settings.global["rampant-maintenance-solar-panel-min-cooldown"].value*60, settings.global["rampant-maintenance-solar-panel-max-cooldown"].value*60-settings.global["rampant-maintenance-solar-panel-min-cooldown"].value*60 }
-    world.buildDamage["solar-panel"] = { settings.global["rampant-maintenance-solar-panel-min-damage"].value, settings.global["rampant-maintenance-solar-panel-max-damage"].value-settings.global["rampant-maintenance-solar-panel-min-damage"].value }
-    world.buildDamageFailure["solar-panel"] = { settings.global["rampant-maintenance-solar-panel-min-damage-failure"].value, settings.global["rampant-maintenance-solar-panel-max-damage-failure"].value-settings.global["rampant-maintenance-solar-panel-min-damage-failure"].value }
-    world.buildFailure["solar-panel"] = { settings.global["rampant-maintenance-solar-panel-min-failure-rate"].value, settings.global["rampant-maintenance-solar-panel-max-failure-rate"].value-settings.global["rampant-maintenance-solar-panel-min-failure-rate"].value }
 
     world.entityCursor = 1
     world.entityFill = 1
     world.entities = {}
+    world.entityLookup = {}
+    world.entitySelected = {}
     world.entities.len = 0
+    world.playerPopup = {}
+    world.playerEntity = {}
+    world.playerIterator = nil
 
     rendering.clear("RampantMaintenance")
 
@@ -187,27 +121,203 @@ local function onModSettingsChange(event)
                 })
                 for _,entity in pairs(entities) do
                     local len = world.entities.len+1
-                    world.entities[len] = generate(game.tick, entity, world)
+                    local entityRecord = generate(game.tick, entity, world)
+                    world.entities[len] = entityRecord
                     world.entities.len = len
+                    world.entityLookup[entityRecord.eU] = entityRecord
                 end
             end
         end
     end
 
-    for i,p in ipairs(game.connected_players) do
-        p.print("Rampant Maintenance - Changing building toggles")
-    end
+    game.print("Rampant Maintenance - Changing building toggles")
 
     return true
 end
 
+local function clearMetrics(popups, playerId)
+    if popups and rendering.is_valid(popups[1]) then
+        for i=1,6 do
+            rendering.destroy(popups[i])
+        end
+    end
+    world.playerPopup[playerId] = nil
+    world.playerEntity[playerId] = nil
+end
+
+local function renderMetrics(entityRecord, player, popups)
+    local entity = entityRecord.e
+    local mttr = 0
+    local mtbf = entityRecord["u"]
+    if entityRecord["fC"] ~= 0 then
+        mttr = (entityRecord["d"] / entityRecord["fC"])
+        mtbf = (mtbf / entityRecord["fC"])
+    end
+    local uptimeDenominator = (mttr + mtbf)
+    local uptime
+    if uptimeDenominator ~= 0 then
+        uptime = roundToNearest((mtbf / uptimeDenominator) * 100, 0.1)
+    else
+        uptime = 100
+    end
+    local uptimeDuration = convertToTimeScale(entityRecord["u"])
+    local downtimeDuration = convertToTimeScale(entityRecord["d"])
+    local mtbfDuration = convertToTimeScale(mtbf)
+    local mttrDuration = convertToTimeScale(mttr)
+    if not popups then
+        return {
+            rendering.draw_text({
+                    text={
+                        "description.rampant-maintenance--metric-popup0",
+                        uptimeDuration
+                    },
+                    time_to_live=POPUP_TTL,
+                    surface = entity.surface,
+                    target = entity,
+                    color = { r = 0, g = 1, b = 0 },
+                    target_offset = { 0, 0.5 },
+                    scale = 1.2,
+                    players={player},
+                    only_in_alt_mode = true
+            }),
+            rendering.draw_text({
+                    text={
+                        "description.rampant-maintenance--metric-popup1",
+                        downtimeDuration
+                    },
+                    time_to_live=POPUP_TTL,
+                    surface = entity.surface,
+                    target = entity,
+                    color = { r = 1, g = 0, b = 0 },
+                    target_offset = { 0, 1.0 },
+                    scale = 1.2,
+                    players={player},
+                    only_in_alt_mode = true
+            }),
+            rendering.draw_text({
+                    text={
+                        "description.rampant-maintenance--metric-popup2",
+                        entityRecord["fC"]
+                    },
+                    time_to_live=POPUP_TTL,
+                    surface = entity.surface,
+                    target = entity,
+                    color = { r = 1, g = 0, b = 0 },
+                    target_offset = { 0, 1.5 },
+                    scale = 1.2,
+                    players={player},
+                    only_in_alt_mode = true
+            }),
+            rendering.draw_text({
+                    text={
+                        "description.rampant-maintenance--metric-popup3",
+                        mtbfDuration
+                    },
+                    time_to_live=POPUP_TTL,
+                    surface = entity.surface,
+                    target = entity,
+                    color = { r = 0, g = 1, b = 0 },
+                    target_offset = { 0, 2.0 },
+                    scale = 1.2,
+                    players={player},
+                    only_in_alt_mode = true
+            }),
+            rendering.draw_text({
+                    text={
+                        "description.rampant-maintenance--metric-popup4",
+                        mttrDuration
+                    },
+                    time_to_live=POPUP_TTL,
+                    surface = entity.surface,
+                    target = entity,
+                    color = { r = 1, g = 0, b = 0 },
+                    target_offset = { 0, 2.5 },
+                    scale = 1.2,
+                    players={player},
+                    only_in_alt_mode = true
+            }),
+            rendering.draw_text({
+                    text={
+                        "description.rampant-maintenance--metric-popup5",
+                        uptime
+                    },
+                    time_to_live=POPUP_TTL,
+                    surface = entity.surface,
+                    target = entity,
+                    color = { r = 0, g = 1, b = 1 },
+                    target_offset = { 0, 3.0 },
+                    scale = 1.2,
+                    players={player},
+                    only_in_alt_mode = true
+            })
+        }
+    else
+        if (rendering.is_valid(popups[1]) and (rendering.get_time_to_live(popups[1]) < 30)) then
+            rendering.set_text(
+                popups[1],
+                {
+                    "description.rampant-maintenance--metric-popup0",
+                    uptimeDuration
+                }
+            )
+            rendering.set_text(
+                popups[2],
+                {
+                    "description.rampant-maintenance--metric-popup1",
+                    downtimeDuration
+                }
+            )
+            rendering.set_text(
+                popups[3],
+                {
+                    "description.rampant-maintenance--metric-popup2",
+                    entityRecord["fC"]
+                }
+            )
+            rendering.set_text(
+                popups[4],
+                {
+                    "description.rampant-maintenance--metric-popup3",
+                    mtbfDuration
+                }
+            )
+            rendering.set_text(
+                popups[5],
+                {
+                    "description.rampant-maintenance--metric-popup4",
+                    mttrDuration
+                }
+            )
+            rendering.set_text(
+                popups[6],
+                {
+                    "description.rampant-maintenance--metric-popup5",
+                    uptime
+                }
+            )
+            for i=1,6 do
+                rendering.set_time_to_live(
+                    popups[i],
+                    POPUP_TTL
+                )
+            end
+        end
+        return popups
+    end
+end
+
 local function onConfigChanged()
-    if not world.version or world.version < 6 then
+    if not world.version or world.version < 7 then
+        world.version = 7
 
         world.entityCursor = 1
         world.entityFill = 1
         world.entities = {}
+        world.entityLookup = {}
         world.entities.len = 0
+        world.playerPopup = {}
+        world.playerEntity = {}
+        world.playerIterator = nil
 
         world.queries = {}
         world.forceResearched = {}
@@ -226,7 +336,6 @@ local function onConfigChanged()
         for _,p in ipairs(game.connected_players) do
             p.print("Rampant Maintenance - Version 1.2.0")
         end
-        world.version = 6
     end
 end
 
@@ -234,7 +343,7 @@ local function processEntity(tick)
     if (world.entityCursor <= world.entities.len) then
         local cursor = world.entityCursor
         local entityData = world.entities[cursor]
-        if entityData and entityData.e.valid then
+        if entityData.e.valid then
             local entityType = entityData.e.type
             local predicate = processRecord[entityType]
             if predicate then
@@ -242,11 +351,15 @@ local function processEntity(tick)
                 local fillCursor = world.entityFill
                 world.entities[fillCursor] = entityData
                 world.entityFill = fillCursor + 1
+            else
+                world.entityLookup[entityData.eU] = nil
             end
+        else
+            world.entityLookup[entityData.eU] = nil
         end
         world.entityCursor = cursor + 1
     else
-        world.entities.len = world.entityFill
+        world.entities.len = world.entityFill - 1
         world.entityCursor = 1
         world.entityFill = 1
     end
@@ -255,12 +368,16 @@ end
 local function onPlayerRepaired(event)
     local entity = event.entity
     if entity.valid and (entity.get_health_ratio() == 1) then
-        activateEntity(entity)
+        local entityRecord = world.entityLookup[entity.unit_number]
+        if entityRecord then
+            activateEntity(entityRecord, event.tick)
+        end
     end
 end
 
 local function onTick(event)
     local tick = event.tick
+
     for _=1,world.checksPerTick do
         world.rollFailure = mRandom()
         world.rollDamageFailure = mRandom()
@@ -269,6 +386,32 @@ local function onTick(event)
         world.rollDamage = mRandom()
 
         processEntity(tick)
+    end
+
+    local playerId = world.playerIterator
+    if not playerId then
+        world.playerIterator = next(game.connected_players, world.playerIterator)
+    else
+        local player = game.connected_players[playerId]
+        local selectedEntity = player.selected
+        local popups = world.playerPopup[playerId]
+        if selectedEntity then
+            local entityRecord = world.entityLookup[selectedEntity.unit_number]
+            if not entityRecord then
+                clearMetrics(popups, playerId)
+            else
+                recordSelection(entityRecord, tick)
+                if (world.playerEntity[playerId] ~= entityRecord.eU) then
+                    clearMetrics(popups, playerId)
+                    world.playerPopup[playerId] = renderMetrics(entityRecord, player)
+                else
+                    world.playerPopup[playerId] = renderMetrics(entityRecord, player, popups)
+                end
+                world.playerEntity[playerId] = entityRecord.eU
+            end
+        else
+            clearMetrics(popups, playerId)
+        end
     end
 end
 
@@ -279,8 +422,10 @@ local function onCreate(event)
         local build = world.buildLookup[entity.type]
         if (build and (cMask["player-layer"] or cMask["object-layer"])) then
             local len = world.entities.len+1
-            world.entities[len] = generate(event.tick, entity, world)
+            local entityRecord = generate(event.tick, entity, world)
+            world.entities[len] = entityRecord
             world.entities.len = len
+            world.entityLookup[entityRecord.eU] = entityRecord
         end
     end
 end
@@ -297,19 +442,10 @@ local function onLoad()
     world = global.world
 end
 
-local researchLookup = {}
-for i=1,9 do
-    researchLookup["rampant-maintenance-reduce-failure-"..i] = "failure"
-    researchLookup["rampant-maintenance-reduce-damage-"..i] = "damage"
-    researchLookup["rampant-maintenance-reduce-damage-failure-"..i] = "damage-failure"
-    researchLookup["rampant-maintenance-reduce-downtime-"..i] = "downtime"
-    researchLookup["rampant-maintenance-reduce-checks-"..i] = "cooldown"
-end
-
 local function onResearchFinished(event)
     local research = event.research
     local researchName = research.name
-    local researchType = researchLookup[researchName]
+    local researchType = RESEARCH_LOOKUP[researchName]
     if (researchType) then
         local researchForce = research.force.name
         local researches = world.forceResearched[researchForce]

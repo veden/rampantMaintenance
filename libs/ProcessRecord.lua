@@ -2,109 +2,156 @@ if processRecordG then
     return processRecordG
 end
 
+-- imports
+
+local constants = require("Constants")
+
+-- constants
+
 local DEFINES_ENTITY_STATUS_LOW_POWER = defines.entity_status.low_power
 local DEFINES_ENTITY_STATUS_WORKING = defines.entity_status.working
 local DEFINES_ENTITY_STATUS_LOW_INPUT_FLUID = defines.entity_status.low_input_fluid
 local DEFINES_ENTITY_STATUS_NO_AMMO = defines.entity_status.no_ammo
 
+local ENTITES_WITHOUT_DOWNTIME = constants.ENTITES_WITHOUT_DOWNTIME
+
+-- imported functions
+
 local mMax = math.max
+
+-- modules
 
 local processRecord = {}
 
-local function getResearch(force, world, type)
-    local researches = world.forceResearched[force]
-    return (researches and researches[type]) or 1
+local function getResearch(forceName, world, typeName)
+    local researches = world.forceResearched[forceName]
+    return (researches and researches[typeName]) or 1
+end
+
+local function calculateFailureChance(world, entity, invertedHealthPercent)
+    local entityType = entity.type
+    local entityForceName = entity.force.name
+    local failures = world.buildFailure[entityType]
+    local damageFailures = world.buildDamageFailure[entityType]
+    local chanceOfFailure = ((world.rollChanceFailure * failures.range) + failures.low)
+    local chanceOfFailureDamaged = (invertedHealthPercent *
+                                    ((world.rollDamageFailure * damageFailures.range) + damageFailures.low))
+
+    return (chanceOfFailureDamaged * getResearch(entityForceName, world, "damage-failure")) +
+        (chanceOfFailure * getResearch(entityForceName, world, "failure"))
+end
+
+local function calculateCooldown(world, entity, healthPercent)
+    local cooldowns = world.buildCooldown[entity.type]
+    local cooldown = mMax(0.2, healthPercent) * ((world.rollCooldown * cooldowns.range) + cooldowns.low)
+    return (cooldown * (1 + (1 - getResearch(entity.force.name, world, "cooldown"))))
+end
+
+local function calculateDowntime(world, entity, invertedHealthPercent)
+    local downtimes = world.buildDowntime[entity.type]
+    local downtime = (((world.rollCooldown * downtimes.range) + downtimes.low) * mMax(1, 1+invertedHealthPercent))
+    return downtime * getResearch(entity.force.name, world, "downtime")
+end
+
+local function calculateDamage(world, entity, invertedHealthPercent)
+    local maxHealth = entity.prototype.max_health
+    local damages = world.buildDamage[entity.type]
+    local damage = (((world.rollDamage * damages.range) + damages.low) * maxHealth)
+    local totalDamage = damage * getResearch(entity.force.name, world, "damage")
+    return totalDamage + (totalDamage * invertedHealthPercent)
 end
 
 local function disable(disableQuery, tick, entityRecord, world)
     local entity = entityRecord.e
-    local entityForce = entity.force.name
-    local maxHealth = entity.prototype.max_health
-    local healthPercent = (entity.health / maxHealth)
+    local healthPercent = (entity.health / entity.prototype.max_health)
     local invertedHealthPercent = 1 - healthPercent
     local entityType = entity.type
-    local failures = world.buildFailure[entityType]
-    local damageFailures = world.buildDamageFailure[entityType]
-    local cooldowns = world.buildCooldown[entityType]
-    local chanceOfFailure = ((world.rollChanceFailure * failures[2]) + failures[1]) * getResearch(entityForce, world, "failure")
-    local damageFailure = (invertedHealthPercent * ((world.rollDamageFailure * damageFailures[2]) + damageFailures[1])) * getResearch(entityForce, world, "damage-failure")
-    local brokedown = false
-    local useDefaultCooldown = false
+
+    local chanceOfFailure = calculateFailureChance(world, entity, invertedHealthPercent)
+    local useCooldown = false
     local cooldown
 
-    if (world.rollFailure < (chanceOfFailure + damageFailure)) then
+    if (world.rollFailure < chanceOfFailure) then
         local downtimes = world.buildDowntime[entityType]
-        -- print("type", entityType)
         if downtimes then
-            -- print("down", downtimes[2], downtimes[1], mMax(1, 1+invertedHealthPercent), getResearch(entityForce, world, "downtime"))
-            cooldown = (((world.rollCooldown * downtimes[2]) + downtimes[1]) * mMax(1, 1+invertedHealthPercent)) * getResearch(entityForce, world, "downtime")
+            cooldown = calculateDowntime(world, entity, invertedHealthPercent)
             entity.active = false
-            disableQuery.target = entity
-            disableQuery.surface = entity.surface
-            disableQuery.time_to_live = cooldown
             if world.showBreakdownSprite then
+                disableQuery.target = entity
+                disableQuery.surface = entity.surface
+                disableQuery.time_to_live = cooldown
                 rendering.draw_sprite(disableQuery)
             end
         else
-            -- print("skipping", entityType)
-            useDefaultCooldown = true
+            useCooldown = true
         end
         local energy = entity.energy
         if (energy and (energy > 0)) then
             entity.energy = 0
         end
-        local damages = world.buildDamage[entityType]
-        local damage = (((world.rollDamage * damages[2]) + damages[1]) * maxHealth) * getResearch(entityForce, world, "damage")
-        damage = damage + (damage * invertedHealthPercent)
-        entity.damage(damage, entity.force)
-        brokedown = true
+        entity.damage(
+            calculateDamage(world, entity, invertedHealthPercent),
+            entity.force
+        )
+        entityRecord.fC = entityRecord.fC + 1
     else
-        useDefaultCooldown = true
+        useCooldown = true
     end
 
-    if useDefaultCooldown then
-        -- print("default", cooldowns[2], cooldowns[1], mMax(0.2, healthPercent), (1 + (1 - getResearch(entityForce, world, "cooldown"))))
-        cooldown = (((world.rollCooldown * cooldowns[2]) + cooldowns[1]) * mMax(0.2, healthPercent)) * (1 + (1 - getResearch(entityForce, world, "cooldown")))
+    if useCooldown then
+        cooldown = calculateCooldown(world, entity, healthPercent)
     end
     entityRecord.c = tick + cooldown
-    return brokedown
+    return cooldown
 end
-
-local function defaultCooldown(world, entityRecord, entity, tick)
-    local healthPercent = mMax(0.2, (entity.health / entity.prototype.max_health))
-    local cooldowns = world.buildCooldown[entity.type]
-    local cooldown = healthPercent * ((world.rollCooldown * cooldowns[2]) + cooldowns[1])
-    entityRecord.c = tick + (cooldown * (1 + (1 - getResearch(entity.force.name, world, "cooldown"))))
-end
-
-local inNonActiveSet = {
-    ["solar-panel"] = true,
-    ["electric-pole"] = true,
-    ["accumulator"] = true,
-    ["lamp"] = true
-}
 
 function processRecord.process(predicate, entityRecord, tick, world)
     if (tick > entityRecord.c) then
         local entity = entityRecord.e
         local entityType = entity.type
 
-        if (not inNonActiveSet[entityType]) and (not entity.active) then
+        if (not ENTITES_WITHOUT_DOWNTIME[entityType]) and (not entity.active) then
             entity.active = true
+            entityRecord.d = entityRecord.d + (tick - entityRecord.lE)
+        else
+            entityRecord.u = entityRecord.u + (tick - entityRecord.lE)
         end
 
-        if (predicate(entity)) then
-            disable(world.queries.disableQuery, tick, entityRecord, world)
+        local cooldown
+        if predicate(entity) then
+            cooldown = disable(world.queries.disableQuery,
+                               tick,
+                               entityRecord,
+                               world)
         else
-            defaultCooldown(world, entityRecord, entity, tick)
+            cooldown = calculateCooldown(world,
+                                         entity,
+                                         entity.health / entity.prototype.max_health)
         end
+
+        entityRecord.c = tick + cooldown
+        entityRecord.lE = tick
     end
 end
 
-function processRecord.activateEntity(entity)
-    local entityType = entity.type
-    if (not inNonActiveSet[entityType]) and (not entity.active) then
+function processRecord.recordSelection(entityRecord, tick)
+    local entity = entityRecord.e
+    local entityType = entityRecord.e.type
+    if (not ENTITES_WITHOUT_DOWNTIME[entityType]) and (not entity.active) then
+        entityRecord.d = entityRecord.d + (tick - entityRecord.lE)
+    else
+        entityRecord.u = entityRecord.u + (tick - entityRecord.lE)
+    end
+    entityRecord.lE = tick
+end
+
+function processRecord.activateEntity(entityRecord, tick)
+    local entity = entityRecord.e
+    local entityType = entityRecord.e.type
+    if (not ENTITES_WITHOUT_DOWNTIME[entityType]) and (not entity.active) then
         entity.active = true
+        entityRecord.d = entityRecord.d + (tick - entityRecord.lE)
+        entityRecord.lE = tick
     end
 end
 
@@ -114,11 +161,13 @@ end
 
 processRecord["lab"] = function (entity)
     local status = entity.status
-    return status == DEFINES_ENTITY_STATUS_WORKING or status == DEFINES_ENTITY_STATUS_LOW_POWER
+    return status == DEFINES_ENTITY_STATUS_WORKING or
+        status == DEFINES_ENTITY_STATUS_LOW_POWER
 end
 
 processRecord["lamp"] = function (entity)
-    return (entity.energy > 0.01) and (entity.surface.darkness > 0.4)
+    return (entity.energy > 0.01) and
+        (entity.surface.darkness > 0.4)
 end
 
 processRecord["generator"] = function (entity)
@@ -127,7 +176,8 @@ end
 
 processRecord["mining-drill"] = function (entity)
     local status = entity.status
-    return status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_WORKING
+    return status == DEFINES_ENTITY_STATUS_LOW_POWER or
+        status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["offshore-pump"] = function (entity)
@@ -144,7 +194,9 @@ end
 
 processRecord["boiler"] = function (entity)
     local status = entity.status
-    return status == DEFINES_ENTITY_STATUS_WORKING or status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_LOW_INPUT_FLUID
+    return status == DEFINES_ENTITY_STATUS_WORKING or
+        status == DEFINES_ENTITY_STATUS_LOW_POWER or
+        status == DEFINES_ENTITY_STATUS_LOW_INPUT_FLUID
 end
 
 processRecord["beacon"] = function (entity)
@@ -153,17 +205,20 @@ end
 
 processRecord["assembling-machine"] = function (entity)
     local status = entity.status
-    return status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_WORKING
+    return status == DEFINES_ENTITY_STATUS_LOW_POWER or
+        status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["furnace"] = function (entity)
     local status = entity.status
-    return status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_WORKING
+    return status == DEFINES_ENTITY_STATUS_LOW_POWER or
+        status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["rocket-silo"] = function (entity)
     local status = entity.status
-    return status == DEFINES_ENTITY_STATUS_LOW_POWER or status == DEFINES_ENTITY_STATUS_WORKING
+    return status == DEFINES_ENTITY_STATUS_LOW_POWER or
+        status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["radar"] = function (entity)
