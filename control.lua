@@ -12,6 +12,8 @@ local generate = buildRecord.generate
 local process = processRecord.process
 local activateEntity = processRecord.activateEntity
 local recordSelection = processRecord.recordSelection
+local roundToNearest = constants.roundToNearest
+local getResearch = constants.getResearch
 
 -- local references
 
@@ -30,13 +32,9 @@ local POPUP_TTL = constants.POPUP_TTL
 
 local RESEARCH_LOOKUP = constants.RESEARCH_LOOKUP
 
+local TERRAIN_MODIFIERS = constants.TERRAIN_MODIFIERS
+
 -- module code
-
-local function roundToNearest(number, multiple)
-    local num = number + (multiple * 0.5)
-    return num - (num % multiple)
-end
-
 
 local function convertToTimeScale(v)
     local ts
@@ -55,6 +53,10 @@ local function onModSettingsChange(event)
 
     if event and (string.sub(event.setting, 1, #"rampant-maintenance") ~= "rampant-maintenance") then
         return false
+    end
+
+    if event and event.setting_type == "runtime-per-user" then
+        return
     end
 
     world.rollFailure = mRandom()
@@ -98,6 +100,28 @@ local function onModSettingsChange(event)
     end
 
     world.showBreakdownSprite = settings.global["rampant-maintenance-show-breakdown-sprite"].value
+    world.useTileModifier = settings.startup["rampant-maintenance--tile-modifier"].value
+
+    world.terrainModifierLookup = {}
+    world.playerPopup = {}
+    world.playerEntity = {}
+    world.playerIterator = nil
+
+    if world.useTileModifier then
+        for k in pairs(game.get_filtered_tile_prototypes({})) do
+            for _,tm in pairs(TERRAIN_MODIFIERS) do
+                if string.find(k, tm[1]) then
+                    world.terrainModifierLookup[k] = tm[2]
+                    break
+                end
+            end
+            if not world.terrainModifierLookup[k] then
+                world.terrainModifierLookup[k] = 1
+            end
+        end
+    end
+
+    rendering.clear("RampantMaintenance")
 
     world.entityCursor = 1
     world.entityFill = 1
@@ -105,11 +129,6 @@ local function onModSettingsChange(event)
     world.entityLookup = {}
     world.entitySelected = {}
     world.entities.len = 0
-    world.playerPopup = {}
-    world.playerEntity = {}
-    world.playerIterator = nil
-
-    rendering.clear("RampantMaintenance")
 
     for name,valid in pairs(world.buildLookup) do
         if (valid) then
@@ -137,7 +156,11 @@ end
 
 local function clearMetrics(popups, playerId)
     if popups and rendering.is_valid(popups[1]) then
-        for i=1,6 do
+        local popupCount = 6
+        if world.useTileModifier then
+            popupCount = popupCount + 1
+        end
+        for i=1,popupCount do
             rendering.destroy(popups[i])
         end
     end
@@ -146,6 +169,9 @@ local function clearMetrics(popups, playerId)
 end
 
 local function renderMetrics(entityRecord, player, popups)
+    if not settings.get_player_settings(player)["rampant-maintenance--show-popup-metrics"].value then
+        return
+    end
     local entity = entityRecord.e
     local mttr = 0
     local mtbf = entityRecord["u"]
@@ -156,16 +182,20 @@ local function renderMetrics(entityRecord, player, popups)
     local uptimeDenominator = (mttr + mtbf)
     local uptime
     if uptimeDenominator ~= 0 then
-        uptime = roundToNearest((mtbf / uptimeDenominator) * 100, 0.1)
+        uptime = tostring(roundToNearest((mtbf / uptimeDenominator) * 100, 0.1)).."%"
     else
-        uptime = 100
+        uptime = tostring(100).."%"
     end
     local uptimeDuration = convertToTimeScale(entityRecord["u"])
     local downtimeDuration = convertToTimeScale(entityRecord["d"])
     local mtbfDuration = convertToTimeScale(mtbf)
     local mttrDuration = convertToTimeScale(mttr)
+    local tileModifier
+    if world.useTileModifier then
+        tileModifier = tostring((entityRecord["t"] + getResearch(entity.force.name, world, "tile")) * 100) .. "%"
+    end
     if not popups then
-        return {
+        local renderingPopups = {
             rendering.draw_text({
                     text={
                         "description.rampant-maintenance--metric-popup0",
@@ -251,8 +281,26 @@ local function renderMetrics(entityRecord, player, popups)
                     only_in_alt_mode = true
             })
         }
+        if world.useTileModifier then
+            renderingPopups[#renderingPopups+1] = rendering.draw_text({
+                    text={
+                        "description.rampant-maintenance--metric-popup6",
+                        tileModifier
+                    },
+                    time_to_live=POPUP_TTL,
+                    surface = entity.surface,
+                    target = entity,
+                    color = { r = 0, g = 1, b = 1 },
+                    target_offset = { 0, 3.5 },
+                    scale = 1.2,
+                    players={player},
+                    only_in_alt_mode = true
+            })
+        end
+        return renderingPopups
     else
         if (rendering.is_valid(popups[1]) and (rendering.get_time_to_live(popups[1]) < 30)) then
+            local popupCount = 6
             rendering.set_text(
                 popups[1],
                 {
@@ -295,7 +343,17 @@ local function renderMetrics(entityRecord, player, popups)
                     uptime
                 }
             )
-            for i=1,6 do
+            if world.useTileModifier then
+                rendering.set_text(
+                    popups[7],
+                    {
+                        "description.rampant-maintenance--metric-popup6",
+                        tileModifier
+                    }
+                )
+                popupCount = popupCount + 1
+            end
+            for i=1,popupCount do
                 rendering.set_time_to_live(
                     popups[i],
                     POPUP_TTL
@@ -318,6 +376,7 @@ local function onConfigChanged()
         world.playerPopup = {}
         world.playerEntity = {}
         world.playerIterator = nil
+        world.terrainModifierLookup = {}
 
         world.queries = {}
         world.forceResearched = {}
@@ -453,7 +512,11 @@ local function onResearchFinished(event)
             researches = {}
             world.forceResearched[researchForce] = researches
         end
-        researches[researchType] = 1 - (research.level * 0.08)
+        if researchType == "tile" then
+            researches[researchType] = (research.level * 0.03)
+        else
+            researches[researchType] = 1 - (research.level * 0.08)
+        end
     end
 end
 

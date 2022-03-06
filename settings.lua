@@ -15,8 +15,17 @@ data:extend({
             name = "rampant-maintenance--show-popup-metrics",
             setting_type = "runtime-per-user",
             default_value = true,
-            order = "a[modifier]-a[unit]",
+            order = "a[modifier]-b[unit]",
             per_user = true
+        },
+
+        {
+            type = "bool-setting",
+            name = "rampant-maintenance--tile-modifier",
+            setting_type = "startup",
+            default_value = true,
+            order = "a[modifier]-b[unit]",
+            per_user = false
         },
 
         {

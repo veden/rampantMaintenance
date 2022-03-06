@@ -9,8 +9,10 @@ local function buildResearches(name)
         tint = {r=0.45,g=0.7,b=0.5}
     elseif (name=="failure") then
         tint = {r=0.75,g=0.4,b=0.65}
+    elseif (name=="tile") then
+        tint = {r=0.8,g=0.8,b=0.45}
     end
-    
+
     data:extend({
             {
                 type = "technology",
@@ -306,3 +308,6 @@ buildResearches("damage")
 buildResearches("damage-failure")
 buildResearches("downtime")
 buildResearches("checks")
+if settings.startup["rampant-maintenance--tile-modifier"].value then
+    buildResearches("tile")
+end

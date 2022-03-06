@@ -18,17 +18,14 @@ local ENTITES_WITHOUT_DOWNTIME = constants.ENTITES_WITHOUT_DOWNTIME
 -- imported functions
 
 local mMax = math.max
+local getResearch = constants.getResearch
 
 -- modules
 
 local processRecord = {}
 
-local function getResearch(forceName, world, typeName)
-    local researches = world.forceResearched[forceName]
-    return (researches and researches[typeName]) or 1
-end
-
-local function calculateFailureChance(world, entity, invertedHealthPercent)
+local function calculateFailureChance(world, entityRecord, invertedHealthPercent)
+    local entity = entityRecord.e
     local entityType = entity.type
     local entityForceName = entity.force.name
     local failures = world.buildFailure[entityType]
@@ -37,27 +34,32 @@ local function calculateFailureChance(world, entity, invertedHealthPercent)
     local chanceOfFailureDamaged = (invertedHealthPercent *
                                     ((world.rollDamageFailure * damageFailures.range) + damageFailures.low))
 
-    return (chanceOfFailureDamaged * getResearch(entityForceName, world, "damage-failure")) +
-        (chanceOfFailure * getResearch(entityForceName, world, "failure"))
+    return ((chanceOfFailureDamaged * getResearch(entityForceName, world, "damage-failure")) +
+        (chanceOfFailure * getResearch(entityForceName, world, "failure"))) * (2 - (entityRecord.t + getResearch(entityForceName, world, "tile")))
 end
 
-local function calculateCooldown(world, entity, healthPercent)
+local function calculateCooldown(world, entityRecord, healthPercent)
+    local entity = entityRecord.e
     local cooldowns = world.buildCooldown[entity.type]
     local cooldown = mMax(0.2, healthPercent) * ((world.rollCooldown * cooldowns.range) + cooldowns.low)
     return (cooldown * (1 + (1 - getResearch(entity.force.name, world, "cooldown"))))
 end
 
-local function calculateDowntime(world, entity, invertedHealthPercent)
+local function calculateDowntime(world, entityRecord, invertedHealthPercent)
+    local entity = entityRecord.e
+    local entityForceName = entity.force.name
     local downtimes = world.buildDowntime[entity.type]
     local downtime = (((world.rollCooldown * downtimes.range) + downtimes.low) * mMax(1, 1+invertedHealthPercent))
-    return downtime * getResearch(entity.force.name, world, "downtime")
+    return downtime * getResearch(entityForceName, world, "downtime") * (2 - (entityRecord.t + getResearch(entityForceName, world, "tile")))
 end
 
-local function calculateDamage(world, entity, invertedHealthPercent)
+local function calculateDamage(world, entityRecord, invertedHealthPercent)
+    local entity = entityRecord.e
+    local entityForceName = entity.force.name
     local maxHealth = entity.prototype.max_health
     local damages = world.buildDamage[entity.type]
     local damage = (((world.rollDamage * damages.range) + damages.low) * maxHealth)
-    local totalDamage = damage * getResearch(entity.force.name, world, "damage")
+    local totalDamage = damage * getResearch(entityForceName, world, "damage") * (2 - (entityRecord.t + getResearch(entityForceName, world, "tile")))
     return totalDamage + (totalDamage * invertedHealthPercent)
 end
 
@@ -67,14 +69,14 @@ local function disable(disableQuery, tick, entityRecord, world)
     local invertedHealthPercent = 1 - healthPercent
     local entityType = entity.type
 
-    local chanceOfFailure = calculateFailureChance(world, entity, invertedHealthPercent)
+    local chanceOfFailure = calculateFailureChance(world, entityRecord, invertedHealthPercent)
     local useCooldown = false
     local cooldown
 
     if (world.rollFailure < chanceOfFailure) then
         local downtimes = world.buildDowntime[entityType]
         if downtimes then
-            cooldown = calculateDowntime(world, entity, invertedHealthPercent)
+            cooldown = calculateDowntime(world, entityRecord, invertedHealthPercent)
             entity.active = false
             if world.showBreakdownSprite then
                 disableQuery.target = entity
@@ -90,7 +92,7 @@ local function disable(disableQuery, tick, entityRecord, world)
             entity.energy = 0
         end
         entity.damage(
-            calculateDamage(world, entity, invertedHealthPercent),
+            calculateDamage(world, entityRecord, invertedHealthPercent),
             entity.force
         )
         entityRecord.fC = entityRecord.fC + 1
@@ -99,7 +101,7 @@ local function disable(disableQuery, tick, entityRecord, world)
     end
 
     if useCooldown then
-        cooldown = calculateCooldown(world, entity, healthPercent)
+        cooldown = calculateCooldown(world, entityRecord, healthPercent)
     end
     entityRecord.c = tick + cooldown
     return cooldown
@@ -125,7 +127,7 @@ function processRecord.process(predicate, entityRecord, tick, world)
                                world)
         else
             cooldown = calculateCooldown(world,
-                                         entity,
+                                         entityRecord,
                                          entity.health / entity.prototype.max_health)
         end
 
