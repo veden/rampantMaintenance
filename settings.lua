@@ -56,6 +56,66 @@ data:extend({
             per_user = false
         },
         {
+            type = "int-setting",
+            name = "rampant-maintenance-accumulator-max-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-d[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-accumulator-max-damage",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-accumulator-min-damage",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.025,
+            order = "l[modifier]-e[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-accumulator-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.15,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-accumulator-max-damage-failure",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.4,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-accumulator-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
             type = "double-setting",
             name = "rampant-maintenance-accumulator-max-failure-rate",
             setting_type = "runtime-global",
@@ -76,101 +136,11 @@ data:extend({
             per_user = false
         },
         {
-            type = "int-setting",
-            name = "rampant-maintenance-accumulator-max-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-d[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-accumulator-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-accumulator-min-damage",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.025,
-            order = "l[modifier]-e[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-accumulator-max-damage",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-accumulator-max-damage-failure",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.4,
-            order = "l[modifier]-h[unit]",
-            per_user = false
-        },
-        {
             type = "bool-setting",
             name = "rampant-maintenance-use-ammo-turret",
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-ammo-turret-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-ammo-turret-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-ammo-turret-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-ammo-turret-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -195,12 +165,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-ammo-turret-max-damage-failure",
+            name = "rampant-maintenance-ammo-turret-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.125,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -215,12 +185,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-ammo-turret-max-damage",
+            name = "rampant-maintenance-ammo-turret-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = 0.05,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-ammo-turret-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.125,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-ammo-turret-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-ammo-turret-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-ammo-turret-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-ammo-turret-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -239,46 +259,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-artillery-turret-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-artillery-turret-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-artillery-turret-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-artillery-turret-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -303,12 +283,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-artillery-turret-max-damage-failure",
+            name = "rampant-maintenance-artillery-turret-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.15,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -323,12 +303,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-artillery-turret-max-damage",
+            name = "rampant-maintenance-artillery-turret-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.4,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-artillery-turret-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.15,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-artillery-turret-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-artillery-turret-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-artillery-turret-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-artillery-turret-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -347,46 +377,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-assembling-machine-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-assembling-machine-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-assembling-machine-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-assembling-machine-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -411,12 +401,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-assembling-machine-max-damage-failure",
+            name = "rampant-maintenance-assembling-machine-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -431,12 +421,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-assembling-machine-max-damage",
+            name = "rampant-maintenance-assembling-machine-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.2,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-assembling-machine-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-assembling-machine-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-assembling-machine-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-assembling-machine-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-assembling-machine-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -455,46 +495,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-beacon-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-beacon-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-beacon-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-beacon-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -519,12 +519,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-beacon-max-damage-failure",
+            name = "rampant-maintenance-beacon-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -539,12 +539,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-beacon-max-damage",
+            name = "rampant-maintenance-beacon-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-beacon-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-beacon-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-beacon-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-beacon-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-beacon-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -563,46 +613,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-boiler-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-boiler-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-boiler-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-boiler-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -627,12 +637,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-boiler-max-damage-failure",
+            name = "rampant-maintenance-boiler-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -647,12 +657,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-boiler-max-damage",
+            name = "rampant-maintenance-boiler-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = 0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-boiler-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-boiler-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-boiler-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-boiler-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-boiler-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -684,6 +744,66 @@ data:extend({
             per_user = false
         },
         {
+            type = "int-setting",
+            name = "rampant-maintenance-electric-pole-max-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 1200,
+            order = "l[modifier]-d[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-electric-pole-max-damage",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-electric-pole-min-damage",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.025,
+            order = "l[modifier]-e[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-electric-pole-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-electric-pole-max-damage-failure",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-electric-pole-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 900,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
             type = "double-setting",
             name = "rampant-maintenance-electric-pole-max-failure-rate",
             setting_type = "runtime-global",
@@ -704,101 +824,11 @@ data:extend({
             per_user = false
         },
         {
-            type = "int-setting",
-            name = "rampant-maintenance-electric-pole-max-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 1200,
-            order = "l[modifier]-d[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-electric-pole-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 900,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-electric-pole-min-damage",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.025,
-            order = "l[modifier]-e[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-electric-pole-max-damage",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-electric-pole-max-damage-failure",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
-            per_user = false
-        },
-        {
             type = "bool-setting",
             name = "rampant-maintenance-use-electric-turret",
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-electric-turret-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-electric-turret-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-electric-turret-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-electric-turret-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -823,12 +853,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-electric-turret-max-damage-failure",
+            name = "rampant-maintenance-electric-turret-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.125,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -843,12 +873,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-electric-turret-max-damage",
+            name = "rampant-maintenance-electric-turret-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-electric-turret-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.125,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-electric-turret-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-electric-turret-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-electric-turret-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-electric-turret-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -867,46 +947,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-fluid-turret-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-fluid-turret-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-fluid-turret-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-fluid-turret-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -931,12 +971,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-fluid-turret-max-damage-failure",
+            name = "rampant-maintenance-fluid-turret-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.125,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -951,12 +991,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-fluid-turret-max-damage",
+            name = "rampant-maintenance-fluid-turret-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-fluid-turret-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.125,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-fluid-turret-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-fluid-turret-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-fluid-turret-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-fluid-turret-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -975,46 +1065,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-furnace-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-furnace-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-furnace-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-furnace-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1039,12 +1089,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-furnace-max-damage-failure",
+            name = "rampant-maintenance-furnace-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -1059,12 +1109,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-furnace-max-damage",
+            name = "rampant-maintenance-furnace-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.2,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-furnace-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-furnace-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-furnace-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-furnace-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-furnace-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1083,46 +1183,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-generator-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-generator-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-generator-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-generator-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1147,12 +1207,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-generator-max-damage-failure",
+            name = "rampant-maintenance-generator-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -1167,12 +1227,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-generator-max-damage",
+            name = "rampant-maintenance-generator-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-generator-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-generator-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-generator-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-generator-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-generator-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1191,46 +1301,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-inserter-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-inserter-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-inserter-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-inserter-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1255,12 +1325,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-inserter-max-damage-failure",
+            name = "rampant-maintenance-inserter-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -1275,12 +1345,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-inserter-max-damage",
+            name = "rampant-maintenance-inserter-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-inserter-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-inserter-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-inserter-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-inserter-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-inserter-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1299,46 +1419,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-lab-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-lab-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-lab-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-lab-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1363,12 +1443,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-lab-max-damage-failure",
+            name = "rampant-maintenance-lab-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -1383,12 +1463,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-lab-max-damage",
+            name = "rampant-maintenance-lab-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = 0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-lab-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-lab-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-lab-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-lab-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-lab-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1420,6 +1550,66 @@ data:extend({
             per_user = false
         },
         {
+            type = "int-setting",
+            name = "rampant-maintenance-lamp-max-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-d[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-lamp-max-damage",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-lamp-min-damage",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.025,
+            order = "l[modifier]-e[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-lamp-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = 0,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-lamp-max-damage-failure",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-lamp-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
             type = "double-setting",
             name = "rampant-maintenance-lamp-max-failure-rate",
             setting_type = "runtime-global",
@@ -1440,101 +1630,11 @@ data:extend({
             per_user = false
         },
         {
-            type = "int-setting",
-            name = "rampant-maintenance-lamp-max-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-d[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-lamp-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-lamp-min-damage",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.025,
-            order = "l[modifier]-e[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-lamp-max-damage",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-lamp-max-damage-failure",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
-            per_user = false
-        },
-        {
             type = "bool-setting",
             name = "rampant-maintenance-use-mining-drill",
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-mining-drill-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-mining-drill-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-mining-drill-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-mining-drill-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1559,12 +1659,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-mining-drill-max-damage-failure",
+            name = "rampant-maintenance-mining-drill-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -1579,12 +1679,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-mining-drill-max-damage",
+            name = "rampant-maintenance-mining-drill-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.2,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-mining-drill-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-mining-drill-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-mining-drill-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-mining-drill-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-mining-drill-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1603,46 +1753,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-offshore-pump-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-offshore-pump-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-offshore-pump-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-offshore-pump-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1667,12 +1777,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-offshore-pump-max-damage-failure",
+            name = "rampant-maintenance-offshore-pump-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -1687,12 +1797,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-offshore-pump-max-damage",
+            name = "rampant-maintenance-offshore-pump-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-offshore-pump-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-offshore-pump-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-offshore-pump-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-offshore-pump-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-offshore-pump-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1711,46 +1871,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-pump-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-pump-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-pump-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-pump-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1775,12 +1895,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-pump-max-damage-failure",
+            name = "rampant-maintenance-pump-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -1795,12 +1915,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-pump-max-damage",
+            name = "rampant-maintenance-pump-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = 0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-pump-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-pump-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-pump-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-pump-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-pump-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1819,46 +1989,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-radar-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-radar-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-radar-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-radar-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1883,12 +2013,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-radar-max-damage-failure",
+            name = "rampant-maintenance-radar-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -1903,12 +2033,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-radar-max-damage",
+            name = "rampant-maintenance-radar-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-radar-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-radar-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-radar-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-radar-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-radar-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1927,46 +2107,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-reactor-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-reactor-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-reactor-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-reactor-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -1991,12 +2131,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-reactor-max-damage-failure",
+            name = "rampant-maintenance-reactor-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -2011,12 +2151,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-reactor-max-damage",
+            name = "rampant-maintenance-reactor-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.4,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-reactor-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-reactor-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-reactor-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-reactor-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-reactor-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -2035,46 +2225,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-roboport-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-roboport-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-roboport-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-roboport-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -2099,12 +2249,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-roboport-max-damage-failure",
+            name = "rampant-maintenance-roboport-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -2119,12 +2269,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-roboport-max-damage",
+            name = "rampant-maintenance-roboport-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-roboport-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-roboport-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-roboport-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-roboport-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-roboport-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -2143,46 +2343,6 @@ data:extend({
             setting_type = "runtime-global",
             default_value = true,
             order = "a[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-rocket-silo-min-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-i[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-rocket-silo-max-downtime",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-j[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-rocket-silo-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-rocket-silo-max-failure-rate",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.2,
-            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -2207,12 +2367,12 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-rocket-silo-max-damage-failure",
+            name = "rampant-maintenance-rocket-silo-max-damage",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
             per_user = false
         },
         {
@@ -2227,12 +2387,62 @@ data:extend({
         },
         {
             type = "double-setting",
-            name = "rampant-maintenance-rocket-silo-max-damage",
+            name = "rampant-maintenance-rocket-silo-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = -0.4,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-rocket-silo-max-damage-failure",
             setting_type = "runtime-global",
             minimum_value = 0.0001,
             maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-rocket-silo-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-rocket-silo-min-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-i[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-rocket-silo-max-downtime",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-j[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-rocket-silo-max-failure-rate",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.2,
+            order = "l[modifier]-b[unit]",
             per_user = false
         },
         {
@@ -2264,6 +2474,66 @@ data:extend({
             per_user = false
         },
         {
+            type = "int-setting",
+            name = "rampant-maintenance-solar-panel-max-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 720,
+            order = "l[modifier]-d[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-solar-panel-max-damage",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.1,
+            order = "l[modifier]-f[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-solar-panel-min-damage",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.025,
+            order = "l[modifier]-e[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-solar-panel-tile-modifier",
+            setting_type = "runtime-global",
+            minimum_value = -0.4,
+            maximum_value = 0.4,
+            default_value = 0.1,
+            order = "l[modifier]-k[unit]",
+            per_user = false
+        },
+        {
+            type = "double-setting",
+            name = "rampant-maintenance-solar-panel-max-damage-failure",
+            setting_type = "runtime-global",
+            minimum_value = 0.0001,
+            maximum_value = 1,
+            default_value = 0.3,
+            order = "l[modifier]-h[unit]",
+            per_user = false
+        },
+        {
+            type = "int-setting",
+            name = "rampant-maintenance-solar-panel-min-cooldown",
+            setting_type = "runtime-global",
+            minimum_value = 1,
+            maximum_value = 1000000000,
+            default_value = 420,
+            order = "l[modifier]-c[unit]",
+            per_user = false
+        },
+        {
             type = "double-setting",
             name = "rampant-maintenance-solar-panel-max-failure-rate",
             setting_type = "runtime-global",
@@ -2281,56 +2551,6 @@ data:extend({
             maximum_value = 1,
             default_value = 0.1,
             order = "l[modifier]-g[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-solar-panel-max-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 720,
-            order = "l[modifier]-d[unit]",
-            per_user = false
-        },
-        {
-            type = "int-setting",
-            name = "rampant-maintenance-solar-panel-min-cooldown",
-            setting_type = "runtime-global",
-            minimum_value = 1,
-            maximum_value = 1000000000,
-            default_value = 420,
-            order = "l[modifier]-c[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-solar-panel-min-damage",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.025,
-            order = "l[modifier]-e[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-solar-panel-max-damage",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.1,
-            order = "l[modifier]-f[unit]",
-            per_user = false
-        },
-        {
-            type = "double-setting",
-            name = "rampant-maintenance-solar-panel-max-damage-failure",
-            setting_type = "runtime-global",
-            minimum_value = 0.0001,
-            maximum_value = 1,
-            default_value = 0.3,
-            order = "l[modifier]-h[unit]",
             per_user = false
         }
 })

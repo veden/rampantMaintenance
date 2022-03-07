@@ -6,6 +6,7 @@ Date: 01. 03. 2022
     - Added MTBF, MTTR, Active, Inactive, Uptime, Failure Count
     - Added popup metrics when hovering entities that can breakdown
     - Added tile modifier to modify breakdowns, damage, and downtime
+    - Added per entity type tile base modifier
   Bugfixes:
     - Entities that didn't have a predicate check would not be cleared
 

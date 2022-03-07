@@ -71,7 +71,9 @@ local function onModSettingsChange(event)
     world.buildFailure = {}
     world.buildDamageFailure = {}
     world.buildDowntime = {}
+    world.buildTileModifier = {}
     world.checksPerTick = settings.global["rampant-maintenance-checks-per-tick"].value
+    world.useTileModifier = settings.startup["rampant-maintenance--tile-modifier"].value
 
     for _,name in pairs(ALL_ENTITY_TYPES) do
         world.buildLookup[name] = settings.global["rampant-maintenance-use-" .. name].value
@@ -91,6 +93,9 @@ local function onModSettingsChange(event)
             ["low"] = settings.global["rampant-maintenance-" .. name .."-min-failure-rate"].value,
             ["range"] = settings.global["rampant-maintenance-" .. name .. "-max-failure-rate"].value - settings.global["rampant-maintenance-" .. name .. "-min-failure-rate"].value
         }
+        if world.useTileModifier then
+            world.buildTileModifier[name] = settings.global["rampant-maintenance-"..name.."-tile-modifier"].value
+        end
         if not ENTITES_WITHOUT_DOWNTIME[name] then
             world.buildDowntime[name] = {
                 ["low"] = (settings.global["rampant-maintenance-" .. name .."-min-downtime"].value * 60),
@@ -100,7 +105,6 @@ local function onModSettingsChange(event)
     end
 
     world.showBreakdownSprite = settings.global["rampant-maintenance-show-breakdown-sprite"].value
-    world.useTileModifier = settings.startup["rampant-maintenance--tile-modifier"].value
 
     world.terrainModifierLookup = {}
     world.playerPopup = {}

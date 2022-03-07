@@ -145,6 +145,17 @@ function buildSettings()
                 print("order = \"l[modifier]-i[unit]\",")
                 print("per_user = false")
                 print("},")
+            elseif (attribute=="tile-modifier") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-tile-modifier\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = -0.4,")
+                print("maximum_value = 0.4,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-k[unit]\",")
+                print("per_user = false")
+                print("},")
             end
         end
     end
@@ -158,7 +169,8 @@ function buildSettings()
              ["max-damage-failure"]=0.4,
              ["min-damage-failure"]=0.2,
              ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1
+             ["min-failure-rate"]=0.1,
+             ["tile-modifier"]=-0.15
         }},
 
         {"ammo-turret", {
@@ -171,7 +183,8 @@ function buildSettings()
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60
+             ["min-downtime"]=7*60,
+             ["tile-modifier"]=0.05
         }},
 
         {"artillery-turret", {
@@ -184,7 +197,8 @@ function buildSettings()
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60
+             ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.4
         }},
 
         {"assembling-machine", {
@@ -197,7 +211,8 @@ function buildSettings()
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60
+             ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.2
         }},
 
         {"beacon", {
@@ -210,7 +225,8 @@ function buildSettings()
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60
+             ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.1
         }},
 
         {"boiler", {
@@ -223,7 +239,8 @@ function buildSettings()
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60
+             ["min-downtime"]=7*60,
+             ["tile-modifier"]=0.1
         }},
 
         {"electric-pole", {
@@ -234,7 +251,8 @@ function buildSettings()
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.075,
-             ["min-failure-rate"]=0.05
+             ["min-failure-rate"]=0.05,
+             ["tile-modifier"]=-0.1
         }},
 
         {"electric-turret", {
@@ -247,7 +265,8 @@ function buildSettings()
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60
+             ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.1
         }},
 
         {"fluid-turret", {
@@ -260,7 +279,8 @@ function buildSettings()
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60
+             ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.1
         }},
 
         {"furnace", {
@@ -273,7 +293,8 @@ function buildSettings()
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60
+             ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.2
         }},
 
         {"generator", {
@@ -287,6 +308,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.1
         }},
 
         {"inserter", {
@@ -300,6 +322,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.1
         }},
 
         {"lab", {
@@ -313,6 +336,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=0.1
         }},
 
         {"lamp", {
@@ -323,7 +347,8 @@ function buildSettings()
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1
+             ["min-failure-rate"]=0.1,
+             ["tile-modifier"]=0
         }},
 
         {"mining-drill", {
@@ -337,6 +362,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.2
         }},
 
         {"offshore-pump", {
@@ -350,6 +376,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.1
         }},
 
         {"pump", {
@@ -363,6 +390,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=0.1
         }},
 
         {"radar", {
@@ -376,6 +404,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.1
         }},
 
         {"reactor", {
@@ -389,6 +418,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.4
         }},
 
         {"roboport", {
@@ -402,6 +432,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.1
         }},
 
         {"rocket-silo", {
@@ -415,6 +446,7 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
+             ["tile-modifier"]=-0.4
         }},
 
         {"solar-panel", {
@@ -425,7 +457,8 @@ function buildSettings()
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1
+             ["min-failure-rate"]=0.1,
+             ["tile-modifier"]=0.1
         }}
     }
 
@@ -474,6 +507,7 @@ function buildLocaleSettingsName()
         print("rampant-maintenance-" .. name .. "-max-failure-rate=".. human ..": Maximum failure rate")
         print("rampant-maintenance-" .. name .. "-min-downtime=".. human ..": Minimum downtime")
         print("rampant-maintenance-" .. name .. "-max-downtime=".. human ..": Maximum downtime")
+        print("rampant-maintenance-" .. name .. "-tile-modifier=".. human ..": Tile modifier")
     end
 
     for i,v in ipairs(l) do
@@ -498,6 +532,7 @@ function buildLocaleSettingsDescription()
         print("rampant-maintenance-" .. name .. "-max-failure-rate=The maximum failure rate for calculating a breakdown")
         print("rampant-maintenance-" .. name .. "-min-downtime=The minimum number of seconds that a machine will breakdown for")
         print("rampant-maintenance-" .. name .. "-max-downtime=The maximum number of seconds that a machine will breakdown for")
+        print("rampant-maintenance-" .. name .. "-tile-modifier=The percentage modifier which adds the defined value to the base tile modifier percentage")
     end
 
     for i,v in ipairs(l) do
