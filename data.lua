@@ -1,4 +1,22 @@
 
+data:extend({
+        {
+            type = "shortcut",
+            name = "rampant-maintenance--info",
+            action = "lua",
+            localised_name = {"controls.toggle_maintenance_info"},
+            toggleable = true,
+            icon =
+                {
+                    filename = "__core__/graphics/icons/alerts/warning-icon.png",
+                    priority = "extra-high-no-scale",
+                    scale = 0.25,
+                    size = 64,
+                    flags = {"icon"}
+                }
+        }
+})
+
 local function buildResearches(name)
     local tint = {r=0.65,g=0.65,b=0.65}
     if (name=="damage") then
@@ -11,6 +29,8 @@ local function buildResearches(name)
         tint = {r=0.75,g=0.4,b=0.65}
     elseif (name=="tile") then
         tint = {r=0.8,g=0.8,b=0.45}
+    elseif (name=="pollution") then
+        tint = {r=0.3,g=0.3,b=0.3}
     end
 
     data:extend({
@@ -310,4 +330,7 @@ buildResearches("downtime")
 buildResearches("checks")
 if settings.startup["rampant-maintenance--tile-modifier"].value then
     buildResearches("tile")
+end
+if settings.startup["rampant-maintenance--pollution-modifier"].value then
+    buildResearches("pollution")
 end

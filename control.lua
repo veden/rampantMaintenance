@@ -3,17 +3,13 @@
 local buildRecord = require("libs/BuildRecord")
 local processRecord = require("libs/ProcessRecord")
 local constants = require("libs/Constants")
+local gui = require("libs/Gui")
 
 -- imported functions
-
-local mRandom = math.random
 
 local generate = buildRecord.generate
 local process = processRecord.process
 local activateEntity = processRecord.activateEntity
-local recordSelection = processRecord.recordSelection
-local roundToNearest = constants.roundToNearest
-local getResearch = constants.getResearch
 
 -- local references
 
@@ -21,14 +17,8 @@ local world
 
 -- constants
 
-local TICKS_PER_FIVE_HOURS = constants.TICKS_PER_FIVE_HOURS
-local TICKS_PER_MINUTE = constants.TICKS_PER_MINUTE
-local TICKS_PER_HOUR = constants.TICKS_PER_HOUR
-
 local ALL_ENTITY_TYPES = constants.ALL_ENTITY_TYPES
 local ENTITES_WITHOUT_DOWNTIME = constants.ENTITES_WITHOUT_DOWNTIME
-
-local POPUP_TTL = constants.POPUP_TTL
 
 local RESEARCH_LOOKUP = constants.RESEARCH_LOOKUP
 
@@ -36,34 +26,11 @@ local TERRAIN_MODIFIERS = constants.TERRAIN_MODIFIERS
 
 -- module code
 
-local function convertToTimeScale(v)
-    local ts
-    local suffix
-    if v < TICKS_PER_FIVE_HOURS then
-        ts = roundToNearest(v / TICKS_PER_MINUTE, 0.01)
-        suffix = "(m)"
-    else
-        ts = roundToNearest(v / TICKS_PER_HOUR, 0.001)
-        suffix = "(h)"
-    end
-    return tostring(ts) .. suffix
-end
-
 local function onModSettingsChange(event)
 
     if event and (string.sub(event.setting, 1, #"rampant-maintenance") ~= "rampant-maintenance") then
         return false
     end
-
-    if event and event.setting_type == "runtime-per-user" then
-        return
-    end
-
-    world.rollFailure = mRandom()
-    world.rollDamageFailure = mRandom()
-    world.rollChanceFailure = mRandom()
-    world.rollCooldown = mRandom()
-    world.rollDamage = mRandom()
 
     world.buildLookup = {}
     world.buildDamage = {}
@@ -72,8 +39,10 @@ local function onModSettingsChange(event)
     world.buildDamageFailure = {}
     world.buildDowntime = {}
     world.buildTileModifier = {}
+    world.buildPollutionModifier = {}
     world.checksPerTick = settings.global["rampant-maintenance-checks-per-tick"].value
     world.useTileModifier = settings.startup["rampant-maintenance--tile-modifier"].value
+    world.usePollutionModifier = settings.startup["rampant-maintenance--pollution-modifier"].value
 
     for _,name in pairs(ALL_ENTITY_TYPES) do
         world.buildLookup[name] = settings.global["rampant-maintenance-use-" .. name].value
@@ -96,6 +65,9 @@ local function onModSettingsChange(event)
         if world.useTileModifier then
             world.buildTileModifier[name] = settings.global["rampant-maintenance-"..name.."-tile-modifier"].value
         end
+        if world.usePollutionModifier then
+            world.buildPollutionModifier[name] = settings.global["rampant-maintenance-"..name.."-pollution-modifier"].value
+        end
         if not ENTITES_WITHOUT_DOWNTIME[name] then
             world.buildDowntime[name] = {
                 ["low"] = (settings.global["rampant-maintenance-" .. name .."-min-downtime"].value * 60),
@@ -107,9 +79,6 @@ local function onModSettingsChange(event)
     world.showBreakdownSprite = settings.global["rampant-maintenance-show-breakdown-sprite"].value
 
     world.terrainModifierLookup = {}
-    world.playerPopup = {}
-    world.playerEntity = {}
-    world.playerIterator = nil
 
     if world.useTileModifier then
         for k in pairs(game.get_filtered_tile_prototypes({})) do
@@ -131,7 +100,6 @@ local function onModSettingsChange(event)
     world.entityFill = 1
     world.entities = {}
     world.entityLookup = {}
-    world.entitySelected = {}
     world.entities.len = 0
 
     for name,valid in pairs(world.buildLookup) do
@@ -158,216 +126,6 @@ local function onModSettingsChange(event)
     return true
 end
 
-local function clearMetrics(popups, playerId)
-    if popups and rendering.is_valid(popups[1]) then
-        local popupCount = 6
-        if world.useTileModifier then
-            popupCount = popupCount + 1
-        end
-        for i=1,popupCount do
-            rendering.destroy(popups[i])
-        end
-    end
-    world.playerPopup[playerId] = nil
-    world.playerEntity[playerId] = nil
-end
-
-local function renderMetrics(entityRecord, player, popups)
-    if not settings.get_player_settings(player)["rampant-maintenance--show-popup-metrics"].value then
-        return
-    end
-    local entity = entityRecord.e
-    local mttr = 0
-    local mtbf = entityRecord["u"]
-    if entityRecord["fC"] ~= 0 then
-        mttr = (entityRecord["d"] / entityRecord["fC"])
-        mtbf = (mtbf / entityRecord["fC"])
-    end
-    local uptimeDenominator = (mttr + mtbf)
-    local uptime
-    if uptimeDenominator ~= 0 then
-        uptime = tostring(roundToNearest((mtbf / uptimeDenominator) * 100, 0.1)).."%"
-    else
-        uptime = tostring(100).."%"
-    end
-    local uptimeDuration = convertToTimeScale(entityRecord["u"])
-    local downtimeDuration = convertToTimeScale(entityRecord["d"])
-    local mtbfDuration = convertToTimeScale(mtbf)
-    local mttrDuration = convertToTimeScale(mttr)
-    local tileModifier
-    if world.useTileModifier then
-        tileModifier = tostring((entityRecord["t"] + getResearch(entity.force.name, world, "tile")) * 100) .. "%"
-    end
-    if not popups then
-        local renderingPopups = {
-            rendering.draw_text({
-                    text={
-                        "description.rampant-maintenance--metric-popup0",
-                        uptimeDuration
-                    },
-                    time_to_live=POPUP_TTL,
-                    surface = entity.surface,
-                    target = entity,
-                    color = { r = 0, g = 1, b = 0 },
-                    target_offset = { 0, 0.5 },
-                    scale = 1.2,
-                    players={player},
-                    only_in_alt_mode = true
-            }),
-            rendering.draw_text({
-                    text={
-                        "description.rampant-maintenance--metric-popup1",
-                        downtimeDuration
-                    },
-                    time_to_live=POPUP_TTL,
-                    surface = entity.surface,
-                    target = entity,
-                    color = { r = 1, g = 0, b = 0 },
-                    target_offset = { 0, 1.0 },
-                    scale = 1.2,
-                    players={player},
-                    only_in_alt_mode = true
-            }),
-            rendering.draw_text({
-                    text={
-                        "description.rampant-maintenance--metric-popup2",
-                        entityRecord["fC"]
-                    },
-                    time_to_live=POPUP_TTL,
-                    surface = entity.surface,
-                    target = entity,
-                    color = { r = 1, g = 0, b = 0 },
-                    target_offset = { 0, 1.5 },
-                    scale = 1.2,
-                    players={player},
-                    only_in_alt_mode = true
-            }),
-            rendering.draw_text({
-                    text={
-                        "description.rampant-maintenance--metric-popup3",
-                        mtbfDuration
-                    },
-                    time_to_live=POPUP_TTL,
-                    surface = entity.surface,
-                    target = entity,
-                    color = { r = 0, g = 1, b = 0 },
-                    target_offset = { 0, 2.0 },
-                    scale = 1.2,
-                    players={player},
-                    only_in_alt_mode = true
-            }),
-            rendering.draw_text({
-                    text={
-                        "description.rampant-maintenance--metric-popup4",
-                        mttrDuration
-                    },
-                    time_to_live=POPUP_TTL,
-                    surface = entity.surface,
-                    target = entity,
-                    color = { r = 1, g = 0, b = 0 },
-                    target_offset = { 0, 2.5 },
-                    scale = 1.2,
-                    players={player},
-                    only_in_alt_mode = true
-            }),
-            rendering.draw_text({
-                    text={
-                        "description.rampant-maintenance--metric-popup5",
-                        uptime
-                    },
-                    time_to_live=POPUP_TTL,
-                    surface = entity.surface,
-                    target = entity,
-                    color = { r = 0, g = 1, b = 1 },
-                    target_offset = { 0, 3.0 },
-                    scale = 1.2,
-                    players={player},
-                    only_in_alt_mode = true
-            })
-        }
-        if world.useTileModifier then
-            renderingPopups[#renderingPopups+1] = rendering.draw_text({
-                    text={
-                        "description.rampant-maintenance--metric-popup6",
-                        tileModifier
-                    },
-                    time_to_live=POPUP_TTL,
-                    surface = entity.surface,
-                    target = entity,
-                    color = { r = 0, g = 1, b = 1 },
-                    target_offset = { 0, 3.5 },
-                    scale = 1.2,
-                    players={player},
-                    only_in_alt_mode = true
-            })
-        end
-        return renderingPopups
-    else
-        if (rendering.is_valid(popups[1]) and (rendering.get_time_to_live(popups[1]) < 30)) then
-            local popupCount = 6
-            rendering.set_text(
-                popups[1],
-                {
-                    "description.rampant-maintenance--metric-popup0",
-                    uptimeDuration
-                }
-            )
-            rendering.set_text(
-                popups[2],
-                {
-                    "description.rampant-maintenance--metric-popup1",
-                    downtimeDuration
-                }
-            )
-            rendering.set_text(
-                popups[3],
-                {
-                    "description.rampant-maintenance--metric-popup2",
-                    entityRecord["fC"]
-                }
-            )
-            rendering.set_text(
-                popups[4],
-                {
-                    "description.rampant-maintenance--metric-popup3",
-                    mtbfDuration
-                }
-            )
-            rendering.set_text(
-                popups[5],
-                {
-                    "description.rampant-maintenance--metric-popup4",
-                    mttrDuration
-                }
-            )
-            rendering.set_text(
-                popups[6],
-                {
-                    "description.rampant-maintenance--metric-popup5",
-                    uptime
-                }
-            )
-            if world.useTileModifier then
-                rendering.set_text(
-                    popups[7],
-                    {
-                        "description.rampant-maintenance--metric-popup6",
-                        tileModifier
-                    }
-                )
-                popupCount = popupCount + 1
-            end
-            for i=1,popupCount do
-                rendering.set_time_to_live(
-                    popups[i],
-                    POPUP_TTL
-                )
-            end
-        end
-        return popups
-    end
-end
-
 local function onConfigChanged()
     if not world.version or world.version < 7 then
         world.version = 7
@@ -381,6 +139,8 @@ local function onConfigChanged()
         world.playerEntity = {}
         world.playerIterator = nil
         world.terrainModifierLookup = {}
+        world.playerGuiOpen = {}
+        world.playerGuiTick = {}
 
         world.queries = {}
         world.forceResearched = {}
@@ -394,7 +154,17 @@ local function onConfigChanged()
             time_to_live=0
         }
 
+        world.rollFailure = nil
+        world.rollDamageFailure = nil
+        world.rollChanceFailure = nil
+        world.rollCooldown = nil
+        world.rollDamage = nil
+
         onModSettingsChange()
+
+        for _, force in pairs(game.forces) do
+            force.reset_technology_effects()
+        end
 
         for _,p in ipairs(game.connected_players) do
             p.print("Rampant Maintenance - Version 1.2.0")
@@ -442,12 +212,6 @@ local function onTick(event)
     local tick = event.tick
 
     for _=1,world.checksPerTick do
-        world.rollFailure = mRandom()
-        world.rollDamageFailure = mRandom()
-        world.rollChanceFailure = mRandom()
-        world.rollCooldown = mRandom()
-        world.rollDamage = mRandom()
-
         processEntity(tick)
     end
 
@@ -457,23 +221,11 @@ local function onTick(event)
     else
         local player = game.connected_players[playerId]
         local selectedEntity = player.selected
-        local popups = world.playerPopup[playerId]
         if selectedEntity then
             local entityRecord = world.entityLookup[selectedEntity.unit_number]
-            if not entityRecord then
-                clearMetrics(popups, playerId)
-            else
-                recordSelection(entityRecord, tick)
-                if (world.playerEntity[playerId] ~= entityRecord.eU) then
-                    clearMetrics(popups, playerId)
-                    world.playerPopup[playerId] = renderMetrics(entityRecord, player)
-                else
-                    world.playerPopup[playerId] = renderMetrics(entityRecord, player, popups)
-                end
-                world.playerEntity[playerId] = entityRecord.eU
-            end
+            gui.update(world, playerId, entityRecord, tick)
         else
-            clearMetrics(popups, playerId)
+            gui.update(world, playerId, nil, tick)
         end
     end
 end
@@ -518,6 +270,8 @@ local function onResearchFinished(event)
         end
         if researchType == "tile" then
             researches[researchType] = (research.level * 0.03)
+        elseif researchType == "cooldown" then
+            researches[researchType] = (research.level * 0.08)
         else
             researches[researchType] = 1 - (research.level * 0.08)
         end
@@ -528,8 +282,22 @@ local function onResearchReset(event)
     world.forceResearched[event.force.name] = nil
 end
 
+local function onLuaShortcut(event)
+    if event.prototype_name == "rampant-maintenance--info" then
+        local playerIndex = event.player_index
+        local guiPanel = world.playerGuiOpen[playerIndex]
+        if not guiPanel then
+            world.playerGuiOpen[playerIndex] = gui.create(game.players[playerIndex])
+        else
+            gui.close(world, event.player_index)
+            world.playerGuiOpen[playerIndex] = nil
+        end
+    end
+end
+
 -- hooks
 
+script.on_event(defines.events.on_lua_shortcut, onLuaShortcut)
 script.on_event(defines.events.on_player_repaired_entity, onPlayerRepaired)
 script.on_event(defines.events.on_tick, onTick)
 script.on_init(onInit)

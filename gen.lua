@@ -1,4 +1,4 @@
-function buildSettings()
+function buildSettings(showSettings)
     local templateFailureMax = {
         type = "double-setting",
         name = "rampant-maintenance-lab-failure-rate",
@@ -156,6 +156,17 @@ function buildSettings()
                 print("order = \"l[modifier]-k[unit]\",")
                 print("per_user = false")
                 print("},")
+            elseif (attribute=="pollution-modifier") then
+                print("{")
+                print("type = \"double-setting\",")
+                print("name = \"rampant-maintenance-" .. name .. "-pollution-modifier\",")
+                print("setting_type = \"runtime-global\",")
+                print("minimum_value = 0,")
+                print("maximum_value = 0.4,")
+                print("default_value = "..value..",")
+                print("order = \"l[modifier]-l[unit]\",")
+                print("per_user = false")
+                print("},")
             end
         end
     end
@@ -170,7 +181,8 @@ function buildSettings()
              ["min-damage-failure"]=0.2,
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
-             ["tile-modifier"]=-0.15
+             ["tile-modifier"]=-0.15,
+             ["pollution-modifier"]=0.2
         }},
 
         {"ammo-turret", {
@@ -184,7 +196,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=0.05
+             ["tile-modifier"]=0.05,
+             ["pollution-modifier"]=0.1
         }},
 
         {"artillery-turret", {
@@ -198,7 +211,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.4
+             ["tile-modifier"]=-0.4,
+             ["pollution-modifier"]=0.1
         }},
 
         {"assembling-machine", {
@@ -212,7 +226,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.2
+             ["tile-modifier"]=-0.2,
+             ["pollution-modifier"]=0.3
         }},
 
         {"beacon", {
@@ -226,7 +241,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.1
         }},
 
         {"boiler", {
@@ -240,7 +256,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=0.1
+             ["tile-modifier"]=0.1,
+             ["pollution-modifier"]=0.1
         }},
 
         {"electric-pole", {
@@ -252,7 +269,8 @@ function buildSettings()
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.075,
              ["min-failure-rate"]=0.05,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.05
         }},
 
         {"electric-turret", {
@@ -266,7 +284,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.1
         }},
 
         {"fluid-turret", {
@@ -280,7 +299,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.05
         }},
 
         {"furnace", {
@@ -294,7 +314,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.2
+             ["tile-modifier"]=-0.2,
+             ["pollution-modifier"]=0.1
         }},
 
         {"generator", {
@@ -308,7 +329,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.25
         }},
 
         {"inserter", {
@@ -322,7 +344,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.15
         }},
 
         {"lab", {
@@ -336,7 +359,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=0.1
+             ["tile-modifier"]=0.1,
+             ["pollution-modifier"]=0.1
         }},
 
         {"lamp", {
@@ -348,7 +372,8 @@ function buildSettings()
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
-             ["tile-modifier"]=0
+             ["tile-modifier"]=0,
+             ["pollution-modifier"]=0.15
         }},
 
         {"mining-drill", {
@@ -362,7 +387,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.2
+             ["tile-modifier"]=-0.2,
+             ["pollution-modifier"]=0.2
         }},
 
         {"offshore-pump", {
@@ -376,7 +402,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.1
         }},
 
         {"pump", {
@@ -390,7 +417,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=0.1
+             ["tile-modifier"]=0.1,
+             ["pollution-modifier"]=0.2
         }},
 
         {"radar", {
@@ -404,7 +432,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.1
         }},
 
         {"reactor", {
@@ -418,7 +447,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.4
+             ["tile-modifier"]=-0.4,
+             ["pollution-modifier"]=0.1
         }},
 
         {"roboport", {
@@ -432,7 +462,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1
+             ["tile-modifier"]=-0.1,
+             ["pollution-modifier"]=0.2
         }},
 
         {"rocket-silo", {
@@ -446,7 +477,8 @@ function buildSettings()
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.4
+             ["tile-modifier"]=-0.4,
+             ["pollution-modifier"]=0.4
         }},
 
         {"solar-panel", {
@@ -458,35 +490,39 @@ function buildSettings()
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
-             ["tile-modifier"]=0.1
+             ["tile-modifier"]=0.1,
+             ["pollution-modifier"]=0.4
         }}
     }
 
     for i,v in ipairs(l) do
         p(v[1], i, v[2])
     end
-    print("------------------------------------------------------------------------------------")
-    print("------------------------------------------------------------------------------------")
-    print("------------------------------------------------------------------------------------")
-    print("------------------------------------------------------------------------------------")
-    for i,v in ipairs(l) do
-        local name = v[1]
-        local attributes = v[2]
-        print("world.buildLookup[\"" .. name .. "\"] = settings.global[\"rampant-maintenance-use-" .. name .. "\"].value")
-        if (attributes["max-cooldown"]) then
-            print("world.buildCooldown[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-cooldown\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-cooldown\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-cooldown\"].value*60 }")
-        end
-        if (attributes["max-damage"]) then
-            print("world.buildDamage[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-damage\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-damage\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-damage\"].value }")
-        end
-        if (attributes["max-damage-failure"]) then
-            print("world.buildDamageFailure[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-damage-failure\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-damage-failure\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-damage-failure\"].value }")
-        end
-        if (attributes["max-failure-rate"]) then
-            print("world.buildFailure[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-failure-rate\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-failure-rate\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-failure-rate\"].value }")
-        end
-        if (attributes["max-downtime"]) then
-            print("world.buildDowntime[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-downtime\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-downtime\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-downtime\"].value*60 }")
+    if showSettings then
+
+        print("------------------------------------------------------------------------------------")
+        print("------------------------------------------------------------------------------------")
+        print("------------------------------------------------------------------------------------")
+        print("------------------------------------------------------------------------------------")
+        for i,v in ipairs(l) do
+            local name = v[1]
+            local attributes = v[2]
+            print("world.buildLookup[\"" .. name .. "\"] = settings.global[\"rampant-maintenance-use-" .. name .. "\"].value")
+            if (attributes["max-cooldown"]) then
+                print("world.buildCooldown[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-cooldown\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-cooldown\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-cooldown\"].value*60 }")
+            end
+            if (attributes["max-damage"]) then
+                print("world.buildDamage[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-damage\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-damage\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-damage\"].value }")
+            end
+            if (attributes["max-damage-failure"]) then
+                print("world.buildDamageFailure[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-damage-failure\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-damage-failure\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-damage-failure\"].value }")
+            end
+            if (attributes["max-failure-rate"]) then
+                print("world.buildFailure[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-failure-rate\"].value, settings.global[\"rampant-maintenance-" .. name .. "-max-failure-rate\"].value-settings.global[\"rampant-maintenance-" .. name .. "-min-failure-rate\"].value }")
+            end
+            if (attributes["max-downtime"]) then
+                print("world.buildDowntime[\"" .. name .. "\"] = { settings.global[\"rampant-maintenance-" .. name .."-min-downtime\"].value*60, settings.global[\"rampant-maintenance-" .. name .. "-max-downtime\"].value*60-settings.global[\"rampant-maintenance-" .. name .. "-min-downtime\"].value*60 }")
+            end
         end
     end
 end
@@ -533,6 +569,7 @@ function buildLocaleSettingsDescription()
         print("rampant-maintenance-" .. name .. "-min-downtime=The minimum number of seconds that a machine will breakdown for")
         print("rampant-maintenance-" .. name .. "-max-downtime=The maximum number of seconds that a machine will breakdown for")
         print("rampant-maintenance-" .. name .. "-tile-modifier=The percentage modifier which adds the defined value to the base tile modifier percentage")
+        print("rampant-maintenance-" .. name .. "-pollution-modifier=The max effect that pollution can have on an entity")
     end
 
     for i,v in ipairs(l) do
