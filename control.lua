@@ -270,7 +270,7 @@ local function onResearchFinished(event)
         end
         if researchType == "tile" then
             researches[researchType] = (research.level * 0.03)
-        elseif researchType == "cooldown" then
+        elseif (researchType == "cooldown") or (researchType == "energy") then
             researches[researchType] = (research.level * 0.08)
         else
             researches[researchType] = 1 - (research.level * 0.08)

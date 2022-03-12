@@ -17,6 +17,7 @@ local ENTITES_WITHOUT_DOWNTIME = constants.ENTITES_WITHOUT_DOWNTIME
 
 -- imported functions
 
+local getResearch = constants.getResearch
 local mRandom = math.random
 local calculateLowFailure = constants.calculateLowFailure
 local calculateHighFailure = constants.calculateHighFailure
@@ -85,7 +86,7 @@ local function disable(disableQuery, tick, entityRecord, world)
         end
         local energy = entity.energy
         if (energy and (energy > 0)) then
-            entity.energy = 0
+            entity.energy = entity.energy * getResearch(entity.force.name, world, "energy")
         end
         entity.damage(
             calculateDamage(world, entityRecord, invertedHealthPercent),

@@ -29,6 +29,7 @@ for i=1,9 do
     constants.RESEARCH_LOOKUP["rampant-maintenance-reduce-checks-"..i] = "cooldown"
     constants.RESEARCH_LOOKUP["rampant-maintenance-reduce-tile-"..i] = "tile"
     constants.RESEARCH_LOOKUP["rampant-maintenance-reduce-pollution-"..i] = "pollution"
+    constants.RESEARCH_LOOKUP["rampant-maintenance-reduce-energy-"..i] = "energy"
 end
 
 constants.POPUP_TTL = 60 * 5
@@ -61,7 +62,7 @@ end
 
 function constants.getResearch(forceName, world, typeName)
     local researches = world.forceResearched[forceName]
-    if typeName == "tile" then
+    if typeName == "tile" or typeName == "energy" then
         return (researches and researches[typeName]) or 0
     else
         return (researches and researches[typeName]) or 1

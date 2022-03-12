@@ -301,7 +301,7 @@ function gui.update(world, playerId, entityRecord, tick)
                 ).."(m)"
             }
             contentTable.DamageModifierValue.caption = {
-                "description.rampant-maintenance--metric-popup2",
+                "description.rampant-maintenance--metric-popup3",
                 tostring(
                     roundToNearest(
                         calculateLowDamage(world, entityRecord, healthPercent),
@@ -313,6 +313,9 @@ function gui.update(world, playerId, entityRecord, tick)
                         calculateHighDamage(world, entityRecord, healthPercent),
                         0.01
                     ) * 100
+                ).."%",
+                tostring(
+                    getResearch(entityForceName, world, "energy") * 100
                 ).."%"
             }
             contentTable.UptimeValue.caption = {
