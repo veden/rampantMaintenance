@@ -89,9 +89,12 @@ local function disable(disableQuery, tick, entityRecord, world)
             entity.energy = entity.energy * getResearch(entity.force.name, world, "energy")
         end
         entity.damage(
-            calculateDamage(world, entityRecord, invertedHealthPercent),
+            calculateDamage(world, entityRecord, invertedHealthPercent) * entity.prototype.max_health,
             entity.force
         )
+        if not entity.valid then
+            return 0
+        end
         entityRecord.fC = entityRecord.fC + 1
     else
         useCooldown = true
@@ -100,7 +103,6 @@ local function disable(disableQuery, tick, entityRecord, world)
     if useCooldown then
         cooldown = calculateCooldown(world, entityRecord, healthPercent)
     end
-    entityRecord.c = tick + cooldown
     return cooldown
 end
 
