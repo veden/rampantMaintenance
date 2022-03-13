@@ -297,8 +297,7 @@ local function onLoad()
     world = global.world
 end
 
-local function onResearchFinished(event)
-    local research = event.research
+local function updateForceResearch(research)
     local researchName = research.name
     local researchType = RESEARCH_LOOKUP[researchName]
     if (researchType) then
@@ -309,17 +308,35 @@ local function onResearchFinished(event)
             world.forceResearched[researchForce] = researches
         end
         if researchType == "tile" then
-            researches[researchType] = (research.level * 0.03)
+            researches[researchType] = (research.level * -0.03)
         elseif (researchType == "cooldown") or (researchType == "energy") then
             researches[researchType] = (research.level * 0.08)
+        elseif (researchType == "damage") then
+            researches[researchType] = 1 - (research.level * 0.04)
         else
             researches[researchType] = 1 - (research.level * 0.08)
         end
     end
 end
 
+local function onResearchFinished(event)
+    updateForceResearch(event.research)
+end
+
 local function onResearchReset(event)
-    world.forceResearched[event.force.name] = nil
+    local force = event.force
+    world.forceResearched[force.name] = nil
+    local researchedTech = force.technologies
+    local researchMaxLevels = {}
+    for researchName in pairs(RESEARCH_LOOKUP) do
+        local research = researchedTech[researchName]
+        if research and research.researched then
+            local researchLevel = researchMaxLevels[research.name]
+            if not researchLevel or (researchLevel < research.level) then
+                updateForceResearch(research)
+            end
+        end
+    end
 end
 
 local function onLuaShortcut(event)

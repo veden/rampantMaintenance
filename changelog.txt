@@ -10,24 +10,29 @@ Date: 01. 03. 2022
     - Added per entity type mod setting tile base modifier
     - Added per entity type mod setting pollution max
   Tweaks:
-    - Increased default accumulator failure-rate by 0.1
-    - Increased default ammo-turret failure-rate by 0.2 and increased downtime by 2 minutes
-    - Increased default artillery-turret failure-rate by 0.2 and increased downtime by 2 minutes
-    - Increased default assembling-machine failure-rate by 0.1 and increased downtime by ~2 minutes
-    - Increased default boilder failure-rate by 0.1
-    - Increased default electric-turret failure-rate by 0.1 and increased downtime by ~3 minutes
-    - Increased default fluid-turret failure-rate by 0.1 and increased downtime by ~3 minutes
+    - Reduced damage research reduction by 50% per research level
+    - Increased default accumulator failure-rate by 0.1 and increased damage by 2x
+    - Increased default ammo-turret failure-rate by 0.2 and increased downtime by 2 minutes and increased damage by ~1.5x
+    - Increased default artillery-turret failure-rate by 0.2 and increased downtime by 2 minutes and increased damage by ~2x
+    - Increased default assembling-machine failure-rate by 0.1 and increased downtime by ~2 minutes and increased damage by ~2x
+    - Increased default beacon damage by ~0.5x
+    - Increased default boiler failure-rate by 0.1 and increased damage by ~2x
+    - Increased default electric-pole damage by ~0.5x
+    - Increased default electric-turret failure-rate by 0.1 and increased downtime by ~3 minutes and increased damage by ~0.3x
+    - Increased default fluid-turret failure-rate by 0.1 and increased downtime by ~3 minutes and increased damage by ~2x
     - Increased default furnace failure-rate by 0.1 and increased downtime by ~1 minute
-    - Increased default generator failure-rate by 0.1
-    - Increased default inserter failure-rate by 0.1
-    - Increased default mining drill failure-rate by 0.1 and increased downtime by ~2
-    - Increased default offshore-pump failure-rate by 0.1
-    - Increased default pump failure-rate by 0.1
-    - Increased default radar failure-rate by 0.1
-    - Increased default reactor failure-rate by 2x and increased downtime by 2 minutes
-    - Increased default roboport failure-rate by 0.1
-    - Increased default rocket-port failure-rate by 0.1
-    - Increased default solar panel failure-rate by 0.1
+    - Increased default generator failure-rate by 0.1 and increased damage by ~2x
+    - Increased default inserter failure-rate by 0.1 and increased damage by ~0.5x
+    - Increased default lab damage by ~0.5x
+    - Increased default lamp damage by ~0.5x
+    - Increased default mining drill failure-rate by 0.1 and increased downtime by ~2 and increased damage by ~2x
+    - Increased default offshore-pump failure-rate by 0.1 and increased damage by ~2x
+    - Increased default pump failure-rate by 0.1 and increased damage by ~2x
+    - Increased default radar failure-rate by 0.1 and increased damage by ~0.5x
+    - Increased default reactor failure-rate by 0.2 and increased downtime by 2 minutes and increased damage by ~2x
+    - Increased default roboport failure-rate by 0.1 and increased damage by ~2x
+    - Increased default rocket-port failure-rate by 0.1 and increased damage by ~2.5x
+    - Increased default solar panel failure-rate by 0.1 and increased damage by ~0.5x
   Bugfixes:
     - Entities that didn't have a predicate check would not be cleared
 
