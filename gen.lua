@@ -1,29 +1,5 @@
 function buildSettings(showSettings)
-    local templateFailureMax = {
-        type = "double-setting",
-        name = "rampant-maintenance-lab-failure-rate",
-        setting_type = "runtime-global",
-        minimum_value = 0.0001,
-        maximum_value = 1,
-        default_value = 0.1,
-        order = "l[modifier]-m[unit]",
-        per_user = false
-    }
-
-    local templateFailureMin = {
-        type = "double-setting",
-        name = "rampant-maintenance-lab-failure-rate",
-        setting_type = "runtime-global",
-        minimum_value = 0.0001,
-        maximum_value = 1,
-        default_value = 0.05,
-        order = "l[modifier]-m[unit]",
-        per_user = false
-    }
-
-    local order = {"c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
-
-    local p = function (name, i, attributes)
+    local p = function (name, attributes)
         print("{")
         print("type = \"bool-setting\",")
         print("name = \"rampant-maintenance-use-" .. name .. "\",")
@@ -179,8 +155,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.4,
              ["min-damage-failure"]=0.2,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.2,
              ["tile-modifier"]=0.15,
              ["pollution-modifier"]=0.2
         }},
@@ -192,10 +168,10 @@ function buildSettings(showSettings)
              ["min-damage"]=0.075,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
-             ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60,
+             ["max-failure-rate"]=0.4,
+             ["min-failure-rate"]=0.2,
+             ["max-downtime"]=15*60,
+             ["min-downtime"]=9*60,
              ["tile-modifier"]=0.05,
              ["pollution-modifier"]=0.1
         }},
@@ -207,10 +183,10 @@ function buildSettings(showSettings)
              ["min-damage"]=0.05,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
-             ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60,
+             ["max-failure-rate"]=0.4,
+             ["min-failure-rate"]=0.2,
+             ["max-downtime"]=15*60,
+             ["min-downtime"]=9*60,
              ["tile-modifier"]=0.4,
              ["pollution-modifier"]=0.1
         }},
@@ -222,10 +198,10 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
-             ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.2,
+             ["max-downtime"]=15*60,
+             ["min-downtime"]=9*60,
              ["tile-modifier"]=0.2,
              ["pollution-modifier"]=0.3
         }},
@@ -252,8 +228,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.2,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
              ["tile-modifier"]=-0.05,
@@ -280,10 +256,10 @@ function buildSettings(showSettings)
              ["min-damage"]=0.075,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
-             ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60,
+             ["max-failure-rate"]=0.35,
+             ["min-failure-rate"]=0.15,
+             ["max-downtime"]=16*60,
+             ["min-downtime"]=10*60,
              ["tile-modifier"]=0.1,
              ["pollution-modifier"]=0.1
         }},
@@ -295,10 +271,10 @@ function buildSettings(showSettings)
              ["min-damage"]=0.075,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
-             ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60,
+             ["max-failure-rate"]=0.35,
+             ["min-failure-rate"]=0.2,
+             ["max-downtime"]=15*60,
+             ["min-downtime"]=10*60,
              ["tile-modifier"]=0.1,
              ["pollution-modifier"]=0.05
         }},
@@ -310,10 +286,10 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
-             ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.2,
+             ["max-downtime"]=14*60,
+             ["min-downtime"]=8*60,
              ["tile-modifier"]=0.2,
              ["pollution-modifier"]=0.1
         }},
@@ -325,8 +301,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.2,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
              ["tile-modifier"]=0.3,
@@ -340,8 +316,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.2,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
              ["tile-modifier"]=0.2,
@@ -383,10 +359,10 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
-             ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.2,
+             ["max-downtime"]=15*60,
+             ["min-downtime"]=9*60,
              ["tile-modifier"]=0.3,
              ["pollution-modifier"]=0.2
         }},
@@ -398,8 +374,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.15,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
              ["tile-modifier"]=0.1,
@@ -413,8 +389,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.15,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
              ["tile-modifier"]=0.15,
@@ -428,8 +404,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.2,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
              ["tile-modifier"]=0.25,
@@ -443,10 +419,10 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
-             ["max-downtime"]=12*60,
-             ["min-downtime"]=7*60,
+             ["max-failure-rate"]=0.4,
+             ["min-failure-rate"]=0.2,
+             ["max-downtime"]=14*60,
+             ["min-downtime"]=9*60,
              ["tile-modifier"]=0.4,
              ["pollution-modifier"]=0.1
         }},
@@ -458,8 +434,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.15,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
              ["tile-modifier"]=0.1,
@@ -473,8 +449,8 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.3,
+             ["min-failure-rate"]=0.15,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
              ["tile-modifier"]=0.4,
@@ -488,15 +464,15 @@ function buildSettings(showSettings)
              ["min-damage"]=0.025,
              ["max-damage-failure"]=0.3,
              ["min-damage-failure"]=0.1,
-             ["max-failure-rate"]=0.2,
-             ["min-failure-rate"]=0.1,
+             ["max-failure-rate"]=0.25,
+             ["min-failure-rate"]=0.15,
              ["tile-modifier"]=0.15,
              ["pollution-modifier"]=0.4
         }}
     }
 
-    for i,v in ipairs(l) do
-        p(v[1], i, v[2])
+    for _,v in ipairs(l) do
+        p(v[1], v[2])
     end
     if showSettings then
 
@@ -504,7 +480,7 @@ function buildSettings(showSettings)
         print("------------------------------------------------------------------------------------")
         print("------------------------------------------------------------------------------------")
         print("------------------------------------------------------------------------------------")
-        for i,v in ipairs(l) do
+        for _,v in ipairs(l) do
             local name = v[1]
             local attributes = v[2]
             print("world.buildLookup[\"" .. name .. "\"] = settings.global[\"rampant-maintenance-use-" .. name .. "\"].value")
