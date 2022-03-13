@@ -28,6 +28,8 @@ function buildRecord.generate(tick, entity, world)
         failureCount = 1
     end
     local tileModifier = 1
+    local totalTileModifier = 0
+    local tileCount = 0
     if world.useTileModifier then
         local surface = entity.surface
         local boundingBox = entity.bounding_box
@@ -36,18 +38,16 @@ function buildRecord.generate(tick, entity, world)
                     area = boundingBox
             })
             if #tiles > 0 then
-                local modifier = 0
-                local tileCount = 0
                 for i = 1,#tiles do
                     tileCount = tileCount + 1
-                    modifier = modifier + (world.terrainModifierLookup[tiles[i].name] or 1)
+                    totalTileModifier = totalTileModifier + (world.terrainModifierLookup[tiles[i].name] or 0)
                 end
-                tileModifier = roundToNearest(modifier / tileCount, 0.01)
+                tileModifier = totalTileModifier / tileCount
             end
         end
     end
     return {
-        ["c"] = ((entity.health / entity.prototype.max_health) * cooldown) + tick, -- cooldown
+        ["c"] = (entity.get_health_ratio() * cooldown) + tick, -- cooldown
         ["fC"] = failureCount, -- failed count
         ["u"] = 0, -- uptime
         ["lE"] = tick, -- last event
@@ -56,6 +56,8 @@ function buildRecord.generate(tick, entity, world)
         ["eU"] = entity.unit_number,
         ["t"] = tileModifier,
         ["tM"] = (world.buildTileModifier[entityType] or 0),
+        ["tT"] = totalTileModifier,
+        ["tC"] = tileCount,
         ["p"] = (world.buildPollutionModifier[entityType] or 0)
     }
 end

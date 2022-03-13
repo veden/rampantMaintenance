@@ -181,7 +181,7 @@ function buildSettings(showSettings)
              ["min-damage-failure"]=0.2,
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
-             ["tile-modifier"]=-0.15,
+             ["tile-modifier"]=0.15,
              ["pollution-modifier"]=0.2
         }},
 
@@ -211,7 +211,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.4,
+             ["tile-modifier"]=0.4,
              ["pollution-modifier"]=0.1
         }},
 
@@ -226,7 +226,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.2,
+             ["tile-modifier"]=0.2,
              ["pollution-modifier"]=0.3
         }},
 
@@ -241,7 +241,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.1,
              ["pollution-modifier"]=0.1
         }},
 
@@ -256,7 +256,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=0.1,
+             ["tile-modifier"]=-0.05,
              ["pollution-modifier"]=0.1
         }},
 
@@ -269,7 +269,7 @@ function buildSettings(showSettings)
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.075,
              ["min-failure-rate"]=0.05,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.1,
              ["pollution-modifier"]=0.05
         }},
 
@@ -284,7 +284,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.1,
              ["pollution-modifier"]=0.1
         }},
 
@@ -299,7 +299,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.1,
              ["pollution-modifier"]=0.05
         }},
 
@@ -314,7 +314,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.2,
+             ["tile-modifier"]=0.2,
              ["pollution-modifier"]=0.1
         }},
 
@@ -329,7 +329,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.3,
              ["pollution-modifier"]=0.25
         }},
 
@@ -344,7 +344,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.2,
              ["pollution-modifier"]=0.15
         }},
 
@@ -359,7 +359,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=0.1,
+             ["tile-modifier"]=-0.1,
              ["pollution-modifier"]=0.1
         }},
 
@@ -387,7 +387,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.2,
+             ["tile-modifier"]=0.3,
              ["pollution-modifier"]=0.2
         }},
 
@@ -402,7 +402,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.1,
              ["pollution-modifier"]=0.1
         }},
 
@@ -417,7 +417,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=0.1,
+             ["tile-modifier"]=0.15,
              ["pollution-modifier"]=0.2
         }},
 
@@ -432,7 +432,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.25,
              ["pollution-modifier"]=0.1
         }},
 
@@ -447,7 +447,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.4,
+             ["tile-modifier"]=0.4,
              ["pollution-modifier"]=0.1
         }},
 
@@ -462,7 +462,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.1,
+             ["tile-modifier"]=0.1,
              ["pollution-modifier"]=0.2
         }},
 
@@ -477,7 +477,7 @@ function buildSettings(showSettings)
              ["min-failure-rate"]=0.1,
              ["max-downtime"]=12*60,
              ["min-downtime"]=7*60,
-             ["tile-modifier"]=-0.4,
+             ["tile-modifier"]=0.4,
              ["pollution-modifier"]=0.4
         }},
 
@@ -490,7 +490,7 @@ function buildSettings(showSettings)
              ["min-damage-failure"]=0.1,
              ["max-failure-rate"]=0.2,
              ["min-failure-rate"]=0.1,
-             ["tile-modifier"]=0.1,
+             ["tile-modifier"]=0.15,
              ["pollution-modifier"]=0.4
         }}
     }
@@ -544,6 +544,7 @@ function buildLocaleSettingsName()
         print("rampant-maintenance-" .. name .. "-min-downtime=".. human ..": Minimum downtime")
         print("rampant-maintenance-" .. name .. "-max-downtime=".. human ..": Maximum downtime")
         print("rampant-maintenance-" .. name .. "-tile-modifier=".. human ..": Tile modifier")
+        print("rampant-maintenance-" .. name .. "-pollution-modifier=".. human ..": Pollution max")
     end
 
     for i,v in ipairs(l) do

@@ -141,6 +141,9 @@ local function onConfigChanged()
         world.terrainModifierLookup = {}
         world.playerGuiOpen = {}
         world.playerGuiTick = {}
+        world.tilePositions = {}
+        world.tilePositionId = 1
+        world.tilePositionIterator = nil
 
         world.queries = {}
         world.forceResearched = {}
@@ -215,10 +218,47 @@ local function onTick(event)
         processEntity(tick)
     end
 
+    local tileId = world.tilePositionIterator
+    if not tileId then
+        world.tilePositionIterator = next(world.tilePositions, world.tilePositionIterator)
+    else
+        world.tilePositionIterator = next(world.tilePositions, world.tilePositionIterator)
+        local tileAndPositionPlusSurface = world.tilePositions[tileId]
+        world.tilePositions[tileId] = nil
+        local surface = game.surfaces[tileAndPositionPlusSurface[3]]
+        if not surface.valid then
+            return
+        end
+        local tilePrototype = tileAndPositionPlusSurface[1]
+        local position = tileAndPositionPlusSurface[2]
+        local entities = surface.find_entities_filtered({
+                position = position,
+                limit = 1
+        })
+        if #entities > 0 then
+            local entity = entities[1]
+            if not entity.valid then
+                return
+            end
+            local entityRecord = world.entityLookup[entity.unit_number]
+            if entityRecord then
+                local foundTiles = surface.find_tiles_filtered({
+                        position = position,
+                        radius = 0.1,
+                        limit = 1
+                })
+                entityRecord.tT = (entityRecord.tT - (world.terrainModifierLookup[tilePrototype.name] or 0)) +
+                    (world.terrainModifierLookup[foundTiles[1].name] or 0)
+                entityRecord.t = entityRecord.tT / entityRecord.tC
+            end
+        end
+    end
+
     local playerId = world.playerIterator
     if not playerId then
         world.playerIterator = next(game.connected_players, world.playerIterator)
     else
+        world.playerIterator = next(game.connected_players, playerId)
         local player = game.connected_players[playerId]
         local selectedEntity = player.selected
         if selectedEntity then
@@ -287,7 +327,7 @@ local function onLuaShortcut(event)
         local playerIndex = event.player_index
         local guiPanel = world.playerGuiOpen[playerIndex]
         if not guiPanel then
-            world.playerGuiOpen[playerIndex] = gui.create(game.players[playerIndex])
+            world.playerGuiOpen[playerIndex] = gui.create(game.players[playerIndex], world)
         else
             gui.close(world, event.player_index)
             world.playerGuiOpen[playerIndex] = nil
@@ -295,8 +335,37 @@ local function onLuaShortcut(event)
     end
 end
 
+local function onTileChange(event)
+    if not world.useTileModifier then
+        return
+    end
+    local tiles = event.tiles
+    for i = 1,#tiles do
+        local tile = tiles[i]
+        local position = tile.position
+        world.tilePositions[world.tilePositionId] = {
+            tile.old_tile,
+            {
+                position.x + 0.5,
+                position.y + 0.5
+            },
+            event.surface_index
+        }
+        world.tilePositionId = world.tilePositionId + 1
+    end
+end
+
 -- hooks
 
+script.on_event(
+    {
+        defines.events.on_robot_mined_tile,
+        defines.events.on_player_mined_tile,
+        defines.events.on_robot_built_tile,
+        defines.events.on_player_built_tile,
+        defines.events.script_raised_set_tiles
+    },
+    onTileChange)
 script.on_event(defines.events.on_lua_shortcut, onLuaShortcut)
 script.on_event(defines.events.on_player_repaired_entity, onPlayerRepaired)
 script.on_event(defines.events.on_tick, onTick)

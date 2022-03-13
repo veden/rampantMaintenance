@@ -62,7 +62,7 @@ end
 
 local function disable(disableQuery, tick, entityRecord, world)
     local entity = entityRecord.e
-    local healthPercent = (entity.health / entity.prototype.max_health)
+    local healthPercent = entity.get_health_ratio()
     local invertedHealthPercent = 1 - healthPercent
     local entityType = entity.type
 
@@ -125,7 +125,7 @@ function processRecord.process(predicate, entityRecord, tick, world)
         else
             cooldown = calculateCooldown(world,
                                          entityRecord,
-                                         entity.health / entity.prototype.max_health)
+                                         entity.get_health_ratio())
         end
 
         entityRecord.c = tick + cooldown

@@ -47,11 +47,7 @@ local function convertToTimeScale(v)
     return tostring(ts) .. suffix
 end
 
-local function convertToPollutionModifier(v)
-
-end
-
-function gui.create(player)
+function gui.create(player, world)
     local panel = player.gui.screen.add({
             type="frame",
             name="rampant-maintenance--metrics",
@@ -93,25 +89,29 @@ function gui.create(player)
             name = "MTBFMTTRValue"
     })
 
-    contents.add({
-            type = "label",
-            caption = {"description.rampant-maintenance--tile-modifier"},
-            tooltip = {"tooltip.rampant-maintenance--tile-modifier"}
-    })
-    contents.add({
-            type = "label",
-            name = "TileModifierValue"
-    })
+    if world.useTileModifier then
+        contents.add({
+                type = "label",
+                caption = {"description.rampant-maintenance--tile-modifier"},
+                tooltip = {"tooltip.rampant-maintenance--tile-modifier"}
+        })
+        contents.add({
+                type = "label",
+                name = "TileModifierValue"
+        })
+    end
 
-    contents.add({
-            type = "label",
-            caption = {"description.rampant-maintenance--pollution-modifier"},
-            tooltip = {"tooltip.rampant-maintenance--pollution-modifier"}
-    })
-    contents.add({
-            type = "label",
-            name = "PollutionModifierValue"
-    })
+    if world.usePollutionModifier then
+        contents.add({
+                type = "label",
+                caption = {"description.rampant-maintenance--pollution-modifier"},
+                tooltip = {"tooltip.rampant-maintenance--pollution-modifier"}
+        })
+        contents.add({
+                type = "label",
+                name = "PollutionModifierValue"
+        })
+    end
 
     contents.add({
             type = "label",
@@ -221,8 +221,10 @@ function gui.update(world, playerId, entityRecord, tick)
             local entityForceName = entity.force.name
             if world.useTileModifier then
                 tileModifier = entityRecord["tM"]
-                baseTileModifier = entityRecord["t"]
-                totalTileModifier = tostring((entityRecord["t"] + entityRecord["tM"] + getResearch(entity.force.name, world, "tile")) * 100) .. "%"
+                baseTileModifier = roundToNearest(entityRecord["t"], 0.01)
+                totalTileModifier = tostring(
+                    roundToNearest(entityRecord["t"] + entityRecord["tM"] + getResearch(entity.force.name, world, "tile"), 0.01) * 100
+                ) .. "%"
             end
             if world.usePollutionModifier then
                 local maxPollution = roundToNearest(entityRecord.p * getResearch(entityForceName, world, "pollution"), 0.01)
@@ -230,7 +232,7 @@ function gui.update(world, playerId, entityRecord, tick)
                 pollutionModifier = tostring(roundToNearest(mMin(entity.surface.get_pollution(entity.position) * POLLUTION_TO_PERCENTAGE,
                                                                  maxPollution) * 100, 0.01)).."%"
             end
-            local healthPercent = (entity.health / entity.prototype.max_health)
+            local healthPercent = entity.get_health_ratio()
             local invertedHealthPercent = 1 - healthPercent
 
             contentTable.ActiveInactiveValue.caption = {
@@ -261,8 +263,8 @@ function gui.update(world, playerId, entityRecord, tick)
             }
             contentTable.TileModifierValue.caption = {
                 "description.rampant-maintenance--metric-popup3",
-                tileModifier,
-                baseTileModifier,
+                tostring(baseTileModifier * 100).."%",
+                tostring(tileModifier * 100).."%",
                 totalTileModifier
             }
             contentTable.PollutionModifierValue.caption = {
@@ -289,13 +291,13 @@ function gui.update(world, playerId, entityRecord, tick)
                 "description.rampant-maintenance--metric-popup2",
                 tostring(
                     roundToNearest(
-                        calculateLowDowntime(world, entityRecord, healthPercent) / TICKS_PER_MINUTE,
+                        calculateLowDowntime(world, entityRecord, invertedHealthPercent) / TICKS_PER_MINUTE,
                         0.01
                     )
                 ).."(m)",
                 tostring(
                     roundToNearest(
-                        calculateHighDowntime(world, entityRecord, healthPercent) / TICKS_PER_MINUTE,
+                        calculateHighDowntime(world, entityRecord, invertedHealthPercent) / TICKS_PER_MINUTE,
                         0.01
                     )
                 ).."(m)"
@@ -304,13 +306,13 @@ function gui.update(world, playerId, entityRecord, tick)
                 "description.rampant-maintenance--metric-popup3",
                 tostring(
                     roundToNearest(
-                        calculateLowDamage(world, entityRecord, healthPercent),
+                        calculateLowDamage(world, entityRecord, invertedHealthPercent),
                         0.01
                     ) * 100
                 ).."%",
                 tostring(
                     roundToNearest(
-                        calculateHighDamage(world, entityRecord, healthPercent),
+                        calculateHighDamage(world, entityRecord, invertedHealthPercent),
                         0.01
                     ) * 100
                 ).."%",

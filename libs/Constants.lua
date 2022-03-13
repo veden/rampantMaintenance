@@ -38,19 +38,19 @@ constants.TICKS_PER_HOUR = constants.TICKS_PER_MINUTE * 60
 constants.TICKS_PER_FIVE_HOURS = constants.TICKS_PER_MINUTE * 60 * 5
 
 constants.TERRAIN_MODIFIERS = {
-    {"refined", 1.3},
-    {"marking", 1.3},
-    {"asphalt", 1.3},
-    {"concrete", 1.2},
-    {"stone", 1.1},
-    {"grass", 1.0},
-    {"landfill", 0.9},
-    {"dirt", 0.9},
-    {"snow", 0.8},
-    {"volcanic", 0.8},
-    {"desert", 0.7},
-    {"sand", 0.7},
-    {"nuclear", 0.7}
+    {"refined", -0.3},
+    {"marking", -0.3},
+    {"asphalt", -0.3},
+    {"concrete", -0.2},
+    {"stone", -0.1},
+    {"grass", 0},
+    {"landfill", 0.1},
+    {"dirt", 0.1},
+    {"snow", 0.2},
+    {"volcanic", 0.2},
+    {"desert", 0.3},
+    {"sand", 0.3},
+    {"nuclear", 0.3}
 }
 
 constants.POLLUTION_TO_PERCENTAGE = 1 / 2000
@@ -79,7 +79,7 @@ function constants.calculateLowFailure(world, entityRecord, invertedHealthPercen
     local damageFailureChance = (buildDamageFailure.low * invertedHealthPercent) * constants.getResearch(entityForceName, world, "damage-failure")
     local pollutionModifier = (1 + (mMin(entity.surface.get_pollution(entity.position) * constants.POLLUTION_TO_PERCENTAGE,
                                          entityRecord.p * constants.getResearch(entityForceName, world, "pollution"))))
-    local tileModifier = (2 - (entityRecord.t + constants.getResearch(entityForceName, world, "tile")))
+    local tileModifier = (1 + (entityRecord.t + entityRecord.tM + constants.getResearch(entityForceName, world, "tile")))
     return (failureChance + damageFailureChance) * pollutionModifier * tileModifier
 end
 
@@ -93,7 +93,7 @@ function constants.calculateHighFailure(world, entityRecord, invertedHealthPerce
     local damageFailureChance = ((buildDamageFailure.low + buildDamageFailure.range) * invertedHealthPercent) * constants.getResearch(entityForceName, world, "damage-failure")
     local pollutionModifier = (1 + (mMin(entity.surface.get_pollution(entity.position) * constants.POLLUTION_TO_PERCENTAGE,
                                          entityRecord.p * constants.getResearch(entityForceName, world, "pollution"))))
-    local tileModifier = (2 - (entityRecord.t + constants.getResearch(entityForceName, world, "tile")))
+    local tileModifier = (1 + (entityRecord.t + entityRecord.tM + constants.getResearch(entityForceName, world, "tile")))
     return (failureChance + damageFailureChance) * pollutionModifier * tileModifier
 end
 
@@ -119,7 +119,7 @@ function constants.calculateLowDowntime(world, entityRecord, invertedHealthPerce
         return 0
     end
     local downtime = (downtimes.low * mMax(1, 1+invertedHealthPercent)) * constants.getResearch(entityForceName, world, "downtime")
-    local tileModifier = (2 - (entityRecord.t + constants.getResearch(entityForceName, world, "tile")))
+    local tileModifier = (1 + (entityRecord.t + entityRecord.tM + constants.getResearch(entityForceName, world, "tile")))
     local pollutionModifier = (1 + (mMin(entity.surface.get_pollution(entity.position) * constants.POLLUTION_TO_PERCENTAGE,
                                          entityRecord.p * constants.getResearch(entityForceName, world, "pollution"))))
     return downtime * tileModifier * pollutionModifier
@@ -134,7 +134,7 @@ function constants.calculateHighDowntime(world, entityRecord, invertedHealthPerc
     end
     local downtime = ((downtimes.low + downtimes.range) * mMax(1, 1+invertedHealthPercent)) *
         constants.getResearch(entityForceName, world, "downtime")
-    local tileModifier = (2 - (entityRecord.t + constants.getResearch(entityForceName, world, "tile")))
+    local tileModifier = (1 + (entityRecord.t + entityRecord.tM + constants.getResearch(entityForceName, world, "tile")))
     local pollutionModifier = (1 + (mMin(entity.surface.get_pollution(entity.position) * constants.POLLUTION_TO_PERCENTAGE,
                                          entityRecord.p * constants.getResearch(entityForceName, world, "pollution"))))
     return downtime * tileModifier * pollutionModifier
@@ -145,7 +145,7 @@ function constants.calculateLowDamage(world, entityRecord, invertedHealthPercent
     local entityForceName = entity.force.name
     local damages = world.buildDamage[entity.type]
     local damage = damages.low * constants.getResearch(entityForceName, world, "damage")
-    local tileModifier = (2 - (entityRecord.t + constants.getResearch(entityForceName, world, "tile")))
+    local tileModifier = (1 + (entityRecord.t + entityRecord.tM + constants.getResearch(entityForceName, world, "tile")))
     local pollutionModifier = (1 + (mMin(entity.surface.get_pollution(entity.position) * constants.POLLUTION_TO_PERCENTAGE,
                                          entityRecord.p * constants.getResearch(entityForceName, world, "pollution"))))
     return (damage + (damage * invertedHealthPercent)) * tileModifier * pollutionModifier
@@ -156,7 +156,7 @@ function constants.calculateHighDamage(world, entityRecord, invertedHealthPercen
     local entityForceName = entity.force.name
     local damages = world.buildDamage[entity.type]
     local damage = (damages.low + damages.range) * constants.getResearch(entityForceName, world, "damage")
-    local tileModifier = (2 - (entityRecord.t + constants.getResearch(entityForceName, world, "tile")))
+    local tileModifier = (1 + (entityRecord.t + entityRecord.tM + constants.getResearch(entityForceName, world, "tile")))
     local pollutionModifier = (1 + (mMin(entity.surface.get_pollution(entity.position) * constants.POLLUTION_TO_PERCENTAGE,
                                          entityRecord.p * constants.getResearch(entityForceName, world, "pollution"))))
     return (damage + (damage * invertedHealthPercent)) * tileModifier * pollutionModifier
