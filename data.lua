@@ -4,13 +4,13 @@ data:extend({
             type = "shortcut",
             name = "rampant-maintenance--info",
             action = "lua",
-            localised_name = {"controls.toggle_maintenance_info"},
+            localised_name = {"controls.rampant-maintenance--toggle-maintenance-info"},
             toggleable = true,
             icon =
                 {
-                    filename = "__core__/graphics/icons/alerts/warning-icon.png",
+                    filename = "__core__/graphics/icons/alerts/too-far-from-roboport-icon.png",
                     priority = "extra-high-no-scale",
-                    scale = 0.25,
+                    scale = 1,
                     size = 64,
                     flags = {"icon"}
                 }
