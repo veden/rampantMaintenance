@@ -1,5 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
+  Bugfixes:
+    - Fixed nil value tilePrototype due to script raised_set_tiles
+
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
 Date: 20. 03. 2022
   Tweaks:
     - Changed the license to GPLv3

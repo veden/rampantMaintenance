@@ -143,8 +143,8 @@ local function onModSettingsChange(event)
 end
 
 local function onConfigChanged()
-    if not world.version or world.version < 7 then
-        world.version = 7
+    if not world.version or world.version < 8 then
+        world.version = 8
 
         world.entityCursor = 1
         world.entityFill = 1
@@ -186,7 +186,7 @@ local function onConfigChanged()
         end
 
         for _,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.2.0")
+            p.print("Rampant Maintenance - Version 1.2.2")
         end
     end
 end
@@ -377,7 +377,7 @@ local function onTileChange(event)
         local tile = tiles[i]
         local position = tile.position
         world.tilePositions[world.tilePositionId] = {
-            tile.old_tile,
+            (event.name ~= defines.events.script_raised_set_tiles and tile.old_tile) or tile,
             {
                 position.x + 0.5,
                 position.y + 0.5
