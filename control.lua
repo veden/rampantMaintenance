@@ -388,7 +388,21 @@ local function onTileChange(event)
     end
 end
 
+local function onPlayerRemoved(event)
+    if event.player_index == world.playerIterator then
+        world.playerIterator = nil
+    end
+end
+
 -- hooks
+
+script.on_event(
+    {
+        defines.events.on_player_left_game,
+        defines.events.on_player_kicked,
+        defines.events.on_player_banned
+    },
+    onPlayerRemoved)
 
 script.on_event(
     {

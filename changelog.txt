@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.2.1
+Version: 1.2.2
   Bugfixes:
     - Fixed nil value tilePrototype due to script raised_set_tiles
+    - Fixed during multiplayer per player gui should correctly fix up iterator when player leaves
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
