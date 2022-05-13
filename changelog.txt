@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+  Bugfixes:
+    - Fixed on upgrade breaking gui toggle for existing guis
+
+---------------------------------------------------------------------------------------------------
 Version: 1.2.2
   Bugfixes:
     - Fixed nil value tilePrototype due to script raised_set_tiles

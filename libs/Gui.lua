@@ -64,6 +64,12 @@ local function convertToTimeScale(v)
 end
 
 function gui.create(player, world)
+    local guis = player.gui.screen.children
+    for i=1,#guis do
+        if guis[i].name == "rampant-maintenance--metrics" then
+            return guis[i]
+        end
+    end
     local panel = player.gui.screen.add({
             type="frame",
             name="rampant-maintenance--metrics",
