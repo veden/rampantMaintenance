@@ -2,6 +2,7 @@
 Version: 1.2.3
   Bugfixes:
     - Fixed on upgrade breaking gui toggle for existing guis
+    - Fixed player leaving causing crash with guis
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.2

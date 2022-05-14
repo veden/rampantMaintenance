@@ -186,7 +186,7 @@ local function onConfigChanged()
         end
 
         for _,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.2.2")
+            p.print("Rampant Maintenance - Version 1.2.3")
         end
     end
 end
@@ -389,9 +389,7 @@ local function onTileChange(event)
 end
 
 local function onPlayerRemoved(event)
-    if event.player_index == world.playerIterator then
-        world.playerIterator = nil
-    end
+    world.playerIterator = nil
 end
 
 -- hooks
@@ -400,6 +398,7 @@ script.on_event(
     {
         defines.events.on_player_left_game,
         defines.events.on_player_kicked,
+        defines.events.on_player_removed,
         defines.events.on_player_banned
     },
     onPlayerRemoved)
