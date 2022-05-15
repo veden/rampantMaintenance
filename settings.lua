@@ -28,6 +28,15 @@ data:extend({
 
         {
             type = "bool-setting",
+            name = "rampant-maintenance--robot-repaired",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "a[modifier]-b[unit]",
+            per_user = false
+        },
+
+        {
+            type = "bool-setting",
             name = "rampant-maintenance--tile-modifier",
             setting_type = "startup",
             default_value = true,

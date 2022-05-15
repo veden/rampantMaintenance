@@ -92,6 +92,8 @@ local function onModSettingsChange(event)
         end
     end
 
+    world.entityRobotRepaired = settings.global["rampant-maintenance--robot-repaired"].value
+
     world.showBreakdownSprite = settings.global["rampant-maintenance-show-breakdown-sprite"].value
 
     world.terrainModifierLookup = {}
@@ -143,8 +145,8 @@ local function onModSettingsChange(event)
 end
 
 local function onConfigChanged()
-    if not world.version or world.version < 8 then
-        world.version = 8
+    if not world.version or world.version < 9 then
+        world.version = 9
 
         world.entityCursor = 1
         world.entityFill = 1
@@ -186,7 +188,7 @@ local function onConfigChanged()
         end
 
         for _,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.2.3")
+            p.print("Rampant Maintenance - Version 1.3.0")
         end
     end
 end

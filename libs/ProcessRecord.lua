@@ -123,11 +123,13 @@ local function disable(disableQuery, tick, entityRecord, world)
 end
 
 function processRecord.process(predicate, entityRecord, tick, world)
-    if (tick > entityRecord.c) then
-        local entity = entityRecord.e
-        local entityType = entity.type
+    local entity = entityRecord.e
+    local canActivate = (not ENTITES_WITHOUT_DOWNTIME[entity.type]) and (not entity.active)
 
-        if (not ENTITES_WITHOUT_DOWNTIME[entityType]) and (not entity.active) then
+    if (tick > entityRecord.c)
+        or (world.entityRobotRepaired and canActivate and (entity.get_health_ratio() == 1))
+    then
+        if canActivate then
             entity.active = true
             entityRecord.d = entityRecord.d + (tick - entityRecord.lE)
         else
