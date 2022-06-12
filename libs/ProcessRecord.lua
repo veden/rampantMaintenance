@@ -88,9 +88,10 @@ local function disable(disableQuery, tick, entityRecord, world)
 
     if (mRandom() < chanceOfFailure) then
         local downtimes = world.buildDowntime[entityType]
-        if downtimes then
+        if downtimes and entity.active and entityRecord.a then
             cooldown = calculateDowntime(world, entityRecord, invertedHealthPercent)
             entity.active = false
+            entityRecord.a = false
             if world.showBreakdownSprite then
                 disableQuery.target = entity
                 disableQuery.surface = entity.surface
@@ -124,13 +125,14 @@ end
 
 function processRecord.process(predicate, entityRecord, tick, world)
     local entity = entityRecord.e
-    local canActivate = (not ENTITES_WITHOUT_DOWNTIME[entity.type]) and (not entity.active)
+    local canActivate = (not ENTITES_WITHOUT_DOWNTIME[entity.type]) and not entity.active and not entityRecord.a
 
     if (tick > entityRecord.c)
         or (world.entityRobotRepaired and canActivate and (entity.get_health_ratio() == 1))
     then
         if canActivate then
             entity.active = true
+            entityRecord.a = true
             entityRecord.d = entityRecord.d + (tick - entityRecord.lE)
         else
             entityRecord.u = entityRecord.u + (tick - entityRecord.lE)

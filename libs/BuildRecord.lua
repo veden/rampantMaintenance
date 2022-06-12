@@ -69,6 +69,7 @@ function buildRecord.generate(tick, entity, world)
         ["lE"] = tick, -- last event
         ["d"] = 0, -- downtime
         ["e"] = entity, -- entity,
+        ["a"] = true, -- active
         ["eU"] = entity.unit_number,
         ["t"] = tileModifier,
         ["tM"] = (world.buildTileModifier[entityType] or 0),

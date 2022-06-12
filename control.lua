@@ -44,6 +44,14 @@ local TERRAIN_MODIFIERS = constants.TERRAIN_MODIFIERS
 
 local function onModSettingsChange(event)
 
+    for i=1,world.entities.len do
+        local entityRecord = world.entities[i]
+        if entityRecord.e.valid then
+            entityRecord.e.active = true
+            entityRecord.a = true
+        end
+    end
+
     if event and (string.sub(event.setting, 1, #"rampant-maintenance") ~= "rampant-maintenance") then
         return false
     end
@@ -181,8 +189,6 @@ local function onConfigChanged()
         world.rollCooldown = nil
         world.rollDamage = nil
 
-        onModSettingsChange()
-
         for _, force in pairs(game.forces) do
             force.reset_technology_effects()
         end
@@ -191,6 +197,8 @@ local function onConfigChanged()
         world.version = 10
 
         world.excludeEntityFromBreakdown = {}
+
+        onModSettingsChange()
 
         game.print("Rampant Maintenance - Version 1.4.0")
     end
