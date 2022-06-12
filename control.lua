@@ -186,8 +186,13 @@ local function onConfigChanged()
         for _, force in pairs(game.forces) do
             force.reset_technology_effects()
         end
+    end
+    if world.version < 10 then
+        world.version = 10
 
-        game.print("Rampant Maintenance - Version 1.3.1")
+        world.excludeEntityFromBreakdown = {}
+
+        game.print("Rampant Maintenance - Version 1.4.0")
     end
 end
 
@@ -195,7 +200,7 @@ local function processEntity(tick)
     if (world.entityCursor <= world.entities.len) then
         local cursor = world.entityCursor
         local entityData = world.entities[cursor]
-        if entityData.e.valid then
+        if entityData.e.valid and not world.excludeEntityFromBreakdown[entityData.e.name] then
             local entityType = entityData.e.type
             local predicate = processRecord[entityType]
             if predicate then
@@ -392,6 +397,22 @@ local function onPlayerRemoved(event)
     world.playerIterator = nil
 end
 
+local function addEntityException(entityName)
+    if not world.excludeEntityFromBreakdown[entityName] then
+        world.excludeEntityFromBreakdown[entityName] = true
+        return true
+    end
+    return false
+end
+
+local function removeEntityException(entityName)
+    if world.excludeEntityFromBreakdown[entityName] then
+        world.excludeEntityFromBreakdown[entityName] = nil
+        return true
+    end
+    return false
+end
+
 -- hooks
 
 script.on_event(
@@ -432,3 +453,8 @@ script.on_event(defines.events.on_research_finished, onResearchFinished)
 script.on_event(defines.events.on_technology_effects_reset, onResearchReset)
 
 script.on_configuration_changed(onConfigChanged)
+
+remote.add_interface("rampant-maintenance", {
+                         ["addEntityException"] = addEntityException,
+                         ["removeEntityException"] = removeEntityException
+})
