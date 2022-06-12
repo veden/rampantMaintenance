@@ -187,9 +187,7 @@ local function onConfigChanged()
             force.reset_technology_effects()
         end
 
-        for _,p in ipairs(game.connected_players) do
-            p.print("Rampant Maintenance - Version 1.3.0")
-        end
+        game.print("Rampant Maintenance - Version 1.3.1")
     end
 end
 

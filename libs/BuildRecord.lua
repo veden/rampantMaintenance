@@ -43,7 +43,7 @@ function buildRecord.generate(tick, entity, world)
     if not ENTITES_WITHOUT_DOWNTIME[entityType] and not entity.active then
         failureCount = 1
     end
-    local tileModifier = 1
+    local tileModifier = 0
     local totalTileModifier = 0
     local tileCount = 0
     if world.useTileModifier then

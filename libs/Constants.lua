@@ -54,6 +54,7 @@ constants.TICKS_PER_HOUR = constants.TICKS_PER_MINUTE * 60
 constants.TICKS_PER_FIVE_HOURS = constants.TICKS_PER_MINUTE * 60 * 5
 
 constants.TERRAIN_MODIFIERS = {
+    {"reinforced", -0.35},
     {"refined", -0.3},
     {"marking", -0.3},
     {"asphalt", -0.3},

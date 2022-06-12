@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+  Compatibility:
+    - Added support for krastorio reinforced plates as a tile with 35% bonus
+  Tweaks:
+    - Changed unknown tile type to have 0% modifier
+
+---------------------------------------------------------------------------------------------------
 Version: 1.3.0
   Improvements:
     - Added mod setting to enable robot repairs re-activating machines
