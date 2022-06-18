@@ -30,7 +30,7 @@ data:extend({
             type = "bool-setting",
             name = "rampant-maintenance--robot-repaired",
             setting_type = "runtime-global",
-            default_value = true,
+            default_value = false,
             order = "a[modifier]-b[unit]",
             per_user = false
         },
