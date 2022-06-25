@@ -2,6 +2,7 @@
 Version: 1.4.2
   Bugfixes:
     - Fixed player repaired structures not correctly setting broken record flag
+    - Fixed reactor breaking down when not working
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.1

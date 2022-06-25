@@ -264,7 +264,7 @@ processRecord["electric-turret"] = function (entity)
 end
 
 processRecord["reactor"] = function (entity)
-    return entity.temperature > 0.01
+    return entity.status == DEFINES_ENTITY_STATUS_WORKING
 end
 
 processRecord["pump"] = function (entity)
