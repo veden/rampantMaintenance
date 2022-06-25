@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+  Bugfixes:
+    - Fixed player repaired structures not correctly setting broken record flag
+
+---------------------------------------------------------------------------------------------------
 Version: 1.4.1
   Tweaks:
     - Changed mod setting that robot repairs reactive entities to be off by default

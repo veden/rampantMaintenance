@@ -171,6 +171,7 @@ function processRecord.activateEntity(entityRecord, tick)
     local entityType = entityRecord.e.type
     if (not ENTITES_WITHOUT_DOWNTIME[entityType]) and (not entity.active) then
         entity.active = true
+        entityRecord.a = true
         entityRecord.d = entityRecord.d + (tick - entityRecord.lE)
         entityRecord.lE = tick
     end
